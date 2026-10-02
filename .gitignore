@@ -105,3 +105,9 @@ InitTestScene*.unity*
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
 Assets/Demo/
+Assets/Plugins/Demigiant/DOTween/
+Assets/Packages/R3.1.3.1/
+Assets/Packages/System.ComponentModel.Annotations.5.0.0/
+Assets/Packages/Microsoft.Bcl.TimeProvider.8.0.0/
+Assets/Packages/System.Threading.Channels.8.0.0/
+Assets/
