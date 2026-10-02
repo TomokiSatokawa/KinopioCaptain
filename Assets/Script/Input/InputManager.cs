@@ -17,7 +17,15 @@ namespace Input
             _gameInputs = new();
 
             _gameInputs.Player.Look.performed += OnLook;
-            _gameInputs.Player.Look.canceled+= OnLook;
+            _gameInputs.Player.Look.canceled += OnLook;
+
+            _gameInputs.Enable();
+        }
+
+        private void OnDestroy()
+        {
+            _gameInputs.Disable();
+            _gameInputs.Dispose();
         }
 
         public void OnLook(InputAction.CallbackContext context)
