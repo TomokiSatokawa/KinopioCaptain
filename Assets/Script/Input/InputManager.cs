@@ -1,3 +1,5 @@
+using System;
+using R3;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +10,10 @@ namespace Input
     /// </summary>
     public class InputManager : MonoBehaviour
     {
+        private static Subject<Unit> _zoom = new();
+
         public static Vector2 Look;
+        public static Observable<Unit> Zoom => _zoom;
 
         private static GameInputs _gameInputs;
 
@@ -16,10 +21,16 @@ namespace Input
         {
             _gameInputs = new();
 
-            _gameInputs.Player.Look.performed += OnLook;
-            _gameInputs.Player.Look.canceled += OnLook;
+            SubscribeEvent(_gameInputs.Player.Look, OnLook);
+            SubscribeEvent(_gameInputs.Player.Zoom, OnZoom);
 
             _gameInputs.Enable();
+        }
+
+        private void SubscribeEvent(InputAction action , Action<InputAction.CallbackContext> callback)
+        {
+            action.performed += callback;
+            action.canceled += callback;
         }
 
         private void OnDestroy()
@@ -32,5 +43,13 @@ namespace Input
         {
             Look = context.ReadValue<Vector2>();
         }
+
+        public void OnZoom(InputAction.CallbackContext context) 
+        {
+            if (context.ReadValueAsButton())
+                _zoom.OnNext(Unit.Default);
+        }
+
+
     }
 }
