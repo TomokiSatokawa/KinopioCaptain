@@ -150,7 +150,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Previous"",
                     ""type"": ""Button"",
                     ""id"": ""2776c80d-3c14-4091-8c56-d04ced07a2b0"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -177,6 +177,24 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""name"": ""Zoom"",
                     ""type"": ""Button"",
                     ""id"": ""447c8932-7183-4a7d-bbd3-26a501b11250"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraRotationLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7f72a3e-71cc-4017-a89b-489431a3a246"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraRotationRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""2c5b69cf-9c8d-400a-9200-b7973aa3dabc"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -577,6 +595,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd544c6d-32f4-42f0-aab7-680c9956bb58"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotationLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab3e586b-eb16-42a6-8d24-d9aa0510811b"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CameraRotationRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1174,6 +1214,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
+        m_Player_CameraRotationLeft = m_Player.FindAction("CameraRotationLeft", throwIfNotFound: true);
+        m_Player_CameraRotationRight = m_Player.FindAction("CameraRotationRight", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1277,6 +1319,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Zoom;
+    private readonly InputAction m_Player_CameraRotationLeft;
+    private readonly InputAction m_Player_CameraRotationRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1328,6 +1372,14 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Zoom".
         /// </summary>
         public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CameraRotationLeft".
+        /// </summary>
+        public InputAction @CameraRotationLeft => m_Wrapper.m_Player_CameraRotationLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CameraRotationRight".
+        /// </summary>
+        public InputAction @CameraRotationRight => m_Wrapper.m_Player_CameraRotationRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1384,6 +1436,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
+            @CameraRotationLeft.started += instance.OnCameraRotationLeft;
+            @CameraRotationLeft.performed += instance.OnCameraRotationLeft;
+            @CameraRotationLeft.canceled += instance.OnCameraRotationLeft;
+            @CameraRotationRight.started += instance.OnCameraRotationRight;
+            @CameraRotationRight.performed += instance.OnCameraRotationRight;
+            @CameraRotationRight.canceled += instance.OnCameraRotationRight;
         }
 
         /// <summary>
@@ -1425,6 +1483,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
+            @CameraRotationLeft.started -= instance.OnCameraRotationLeft;
+            @CameraRotationLeft.performed -= instance.OnCameraRotationLeft;
+            @CameraRotationLeft.canceled -= instance.OnCameraRotationLeft;
+            @CameraRotationRight.started -= instance.OnCameraRotationRight;
+            @CameraRotationRight.performed -= instance.OnCameraRotationRight;
+            @CameraRotationRight.canceled -= instance.OnCameraRotationRight;
         }
 
         /// <summary>
@@ -1795,6 +1859,20 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnZoom(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CameraRotationLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCameraRotationLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CameraRotationRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCameraRotationRight(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

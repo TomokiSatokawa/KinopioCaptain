@@ -1,9 +1,7 @@
-using Input;
-using UnityEngine;
-using R3;
-using Cysharp.Threading.Tasks;
-using System.Threading;
 using DG.Tweening;
+using Input;
+using R3;
+using UnityEngine;
 
 namespace InGame.Player
 {
@@ -20,7 +18,7 @@ namespace InGame.Player
         [SerializeField] private float _maxVerticalRotation;
         [SerializeField] private float _minVerticalRotation;
 
-        [Header("Zoom")]
+        [Header("Zoom")]Å@
         [SerializeField] private float[] _zoomAmount;
         [SerializeField] private float _zoomDuration;
         [SerializeField] private Ease _zoomEase;
@@ -66,7 +64,7 @@ namespace InGame.Player
             //éüÇÃIndexÇ…Ç∑ÇÈ
             _currentZoomIndex = (_currentZoomIndex + 1) % _zoomAmount.Length;
 
-            _zoomTween = _camera.DOLocalMoveZ(_zoomAmount[_currentZoomIndex],_zoomDuration).SetEase(_zoomEase);
+            _zoomTween = _camera.DOLocalMoveZ(_zoomAmount[_currentZoomIndex], _zoomDuration).SetEase(_zoomEase);
         }
-        }
+    }
 }
