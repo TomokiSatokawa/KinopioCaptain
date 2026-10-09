@@ -17,8 +17,10 @@ namespace InGame.Player
         [SerializeField] private float _verticalSpeed;
         [SerializeField] private float _maxVerticalRotation;
         [SerializeField] private float _minVerticalRotation;
+        [SerializeField] private float _quickRotationSpeed;
+        [SerializeField,Range(0,180)] private float _quickRotationAngle;
 
-        [Header("Zoom")]@
+        [Header("Zoom")]
         [SerializeField] private float[] _zoomAmount;
         [SerializeField] private float _zoomDuration;
         [SerializeField] private Ease _zoomEase;
@@ -31,6 +33,8 @@ namespace InGame.Player
         private void Start()
         {
             InputManager.Zoom.Subscribe(_ => SwitchZoom());
+            InputManager.CameraRotationLeft.Where(x => x).Subscribe(_ => QuickRotation(1));
+            InputManager.CameraRotationRight.Where(x => x).Subscribe(_ => QuickRotation(-1));
         }
 
         private void Update()
@@ -65,6 +69,11 @@ namespace InGame.Player
             _currentZoomIndex = (_currentZoomIndex + 1) % _zoomAmount.Length;
 
             _zoomTween = _camera.DOLocalMoveZ(_zoomAmount[_currentZoomIndex], _zoomDuration).SetEase(_zoomEase);
+        }
+
+        private void QuickRotation(float amount)
+        {
+            _cameraOrigin.DORotate(Vector3.up * amount * _quickRotationAngle, _quickRotationSpeed);
         }
     }
 }
