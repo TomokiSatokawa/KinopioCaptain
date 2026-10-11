@@ -27,7 +27,7 @@ namespace InGame.Player
 
         private int _currentZoomIndex;
         private Tween _zoomTween;
-
+        private Tween _quickRotationTween;
         private Vector3 _currentEuler = Vector3.zero;
 
         private void Start()
@@ -71,9 +71,24 @@ namespace InGame.Player
             _zoomTween = _camera.DOLocalMoveZ(_zoomAmount[_currentZoomIndex], _zoomDuration).SetEase(_zoomEase);
         }
 
+
         private void QuickRotation(float amount)
         {
-            _cameraOrigin.DORotate(Vector3.up * amount * _quickRotationAngle, _quickRotationSpeed);
+            //‰ñ“]’†‚Í‰ñ“]‚³‚¹‚È‚¢
+            if (_quickRotationTween?.active ?? false) return;
+
+            float startAngle = _currentEuler.y;
+            float endAngle = startAngle + amount * _quickRotationAngle;
+
+            _quickRotationTween = DOVirtual.Float(
+                startAngle,
+                endAngle,
+                _quickRotationSpeed,
+                angle =>
+                {
+                    _currentEuler.y = angle;
+                    _cameraOrigin.rotation = Quaternion.Euler(_currentEuler);
+                });
         }
     }
 }
