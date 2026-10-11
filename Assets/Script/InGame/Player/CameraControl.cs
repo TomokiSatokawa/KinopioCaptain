@@ -17,20 +17,24 @@ namespace InGame.Player
         [SerializeField] private float _verticalSpeed;
         [SerializeField] private float _maxVerticalRotation;
         [SerializeField] private float _minVerticalRotation;
+        [SerializeField] private float _quickRotationSpeed;
+        [SerializeField,Range(0,180)] private float _quickRotationAngle;
 
-        [Header("Zoom")]@
+        [Header("Zoom")]
         [SerializeField] private float[] _zoomAmount;
         [SerializeField] private float _zoomDuration;
         [SerializeField] private Ease _zoomEase;
 
         private int _currentZoomIndex;
         private Tween _zoomTween;
-
+        private Tween _quickRotationTween;
         private Vector3 _currentEuler = Vector3.zero;
 
         private void Start()
         {
             InputManager.Zoom.Subscribe(_ => SwitchZoom());
+            InputManager.CameraRotationLeft.Where(x => x).Subscribe(_ => QuickRotation(1));
+            InputManager.CameraRotationRight.Where(x => x).Subscribe(_ => QuickRotation(-1));
         }
 
         private void Update()
@@ -65,6 +69,26 @@ namespace InGame.Player
             _currentZoomIndex = (_currentZoomIndex + 1) % _zoomAmount.Length;
 
             _zoomTween = _camera.DOLocalMoveZ(_zoomAmount[_currentZoomIndex], _zoomDuration).SetEase(_zoomEase);
+        }
+
+
+        private void QuickRotation(float amount)
+        {
+            //‰ñ“]’†‚Í‰ñ“]‚³‚¹‚È‚¢
+            if (_quickRotationTween?.active ?? false) return;
+
+            float startAngle = _currentEuler.y;
+            float endAngle = startAngle + amount * _quickRotationAngle;
+
+            _quickRotationTween = DOVirtual.Float(
+                startAngle,
+                endAngle,
+                _quickRotationSpeed,
+                angle =>
+                {
+                    _currentEuler.y = angle;
+                    _cameraOrigin.rotation = Quaternion.Euler(_currentEuler);
+                });
         }
     }
 }
