@@ -1,3 +1,4 @@
+using Common;
 using DG.Tweening;
 using Input;
 using R3;
@@ -12,13 +13,16 @@ namespace InGame.Player
     {
         [SerializeField] private Transform _cameraOrigin;
         [SerializeField] private Transform _camera;
+        [SerializeField] private Transform _playerPosition;
         [Header("Rotation")]
         [SerializeField] private float _horizontalSpeed;
         [SerializeField] private float _verticalSpeed;
-        [SerializeField] private float _maxVerticalRotation;
-        [SerializeField] private float _minVerticalRotation;
+        [SerializeField] private FloatRange _verticalRotationRange;
         [SerializeField] private float _quickRotationSpeed;
         [SerializeField,Range(0,180)] private float _quickRotationAngle;
+        [Header("Position")]
+        [SerializeField] private FloatRange _originPositionRangeZ;
+        [SerializeField] private float _followSmoothTime;
 
         [Header("Zoom")]
         [SerializeField] private float[] _zoomAmount;
@@ -40,6 +44,7 @@ namespace InGame.Player
         private void Update()
         {
             CameraRotation();
+            CameraPosition();
         }
 
         private void CameraRotation()
@@ -51,13 +56,21 @@ namespace InGame.Player
 
             var euler = _currentEuler;
 
-            euler.x = Mathf.Clamp(_currentEuler.x + input.y, _minVerticalRotation, _maxVerticalRotation);
+            euler.x = _verticalRotationRange.Clamp(_currentEuler.x + input.y);
 
             euler.y = _currentEuler.y + input.x;
 
             _cameraOrigin.rotation = Quaternion.Euler(euler);
 
             _currentEuler = euler;
+        }
+
+        private void CameraPosition()
+        {
+            var pos = _cameraOrigin.position;
+            var clampedPlayerPos = _originPositionRangeZ.Clamp(_playerPosition.position.z);
+            pos .z = Mathf.Lerp(pos.z, clampedPlayerPos, Time.deltaTime * _followSmoothTime);
+            _cameraOrigin.position = pos;
         }
 
         private void SwitchZoom()
