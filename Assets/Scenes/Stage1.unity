@@ -506,7 +506,7 @@ GameObject:
   - component: {fileID: 306426405}
   - component: {fileID: 306426404}
   - component: {fileID: 306426403}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1889,6 +1889,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a1d295bef09b94eab378521b21262b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControl
+  _capsuleCollider: {fileID: 1039965140}
+  _groundDistance: 0.12
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   _cameraTransform: {fileID: 205023416}
   _moveSpeed: 650
   _lookSpeed: 500
