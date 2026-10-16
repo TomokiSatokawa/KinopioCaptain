@@ -1,32 +1,16 @@
 using UnityEngine;
 
-public class ItemData : MonoBehaviour, IItemData
+namespace InGame.Item
 {
-    [SerializeField] private string _name = "defaultItemName";
-
-    public string Name { get; set; }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class ItemData : MonoBehaviour, ICollectible
     {
-        Name = _name;
+        [SerializeField] private string _name = "defaultItemName";
+
+        public string Name => _name;
+
+        public void PullItem()
+        {
+            Debug.Log($"{Name}‚ğˆø‚Á‚±”²‚¢‚½I");
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void PullItem()
-    {
-        Debug.Log($"{Name}‚ğˆø‚Á‚±”²‚¢‚½I");
-    }
-}
-
-interface IItemData
-{
-    public string Name { get; set; }
-
-    void PullItem();
 }

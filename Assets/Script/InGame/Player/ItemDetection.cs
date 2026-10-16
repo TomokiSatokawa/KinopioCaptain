@@ -1,25 +1,14 @@
+using InGame.Item;
 using UnityEngine;
 
-public class ItemDetection : MonoBehaviour
+namespace InGame.Player
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public class ItemDetection : MonoBehaviour
     {
-        
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Item"))
+        private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("ÉAÉCÉeÉÄÇ∆ê⁄êG");
-            if(other.gameObject.TryGetComponent(out IItemData itemData))
+            if (other.gameObject.TryGetComponent(out ICollectible itemData))
             {
                 itemData.PullItem();
             }
