@@ -1,65 +1,49 @@
-using UnityEngine;
 using Input;
+using UnityEngine;
 
-public class PlayerControl : MonoBehaviour
+namespace InGame.Player
 {
-    [SerializeField] private Transform _cameraTransform;
-    [SerializeField] private float _moveSpeed = 5f;
-    [SerializeField] private float _lookSpeed = 5f;
 
-    private Vector2 _direction;
-    private Vector3 _forward;
-    private Vector3 _right;
-    private Rigidbody _rb;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class PlayerControl : MonoBehaviour
     {
-        _rb = GetComponent<Rigidbody>();
-    }
+        [SerializeField] private Transform _cameraTransform;
+        [SerializeField] private float _moveSpeed = 5f;
+        [SerializeField] private float _lookSpeed = 5f;
+        [SerializeField] private Rigidbody _playerRigidbody;
 
-    // Update is called once per frame
-    void Update()
-    {
-        /*Vector2 lookDirection = InputManager.Move.normalized;
-        float lookMagnitude = lookDirection.magnitude;
-        if(Mathf.Approximately(lookMagnitude, 0f) == false)
+        void Update()
         {
-            LookPlayer(new Vector3(lookDirection.x, 0, lookDirection.y));
-        }*/
+            var forward = _cameraTransform.forward;
+            var right = _cameraTransform.right;
 
-        _forward = _cameraTransform.forward;
-        _right = _cameraTransform.right;
+            forward.y = 0f;
+            right.y = 0f;
 
-        _forward.y = 0f;
-        _right.y = 0f;
+            forward.Normalize();
+            right.Normalize();
 
-        _direction = InputManager.Move.normalized;
-        _direction = _direction.x * _right + _direction.y * _forward;
+            var input = InputManager.Move.normalized;
+            var direction = input.x * right + input.y * forward;
 
-        MovePlayer(_direction);
-        LookPlayer(_direction);
-    }
+            MovePlayer(direction);
 
-    private void MovePlayer(Vector3 direction)
-    {
-        /*var forward = _cameraTransform.forward;
-        var right = _cameraTransform.right;
+            if (direction.magnitude > 0f)
+            {
+                LookPlayer(direction);
+            }
+        }
 
-        forward.y = 0f;
-        right.y = 0f;*/
+        private void MovePlayer(Vector3 direction)
+        {
+            Vector3 move = new Vector3(direction.x, 0, direction.z) * _moveSpeed * Time.deltaTime;
+            _playerRigidbody.linearVelocity = move;
+        }
 
-        //_direction = InputManager.Move.normalized;
-        Vector3 move = new Vector3(direction.x, 0, direction.y) * _moveSpeed * Time.deltaTime;
-        //move = move.x * right + move.z * forward;
-
-        _rb.linearVelocity = move;
-    }
-
-    private void LookPlayer(Vector3 direction)
-    {
-        Quaternion from = transform.rotation;
-        Quaternion to = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.RotateTowards(from, to, _lookSpeed * Time.deltaTime);
+        private void LookPlayer(Vector3 direction)
+        {
+            Quaternion from = transform.rotation;
+            Quaternion to = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.RotateTowards(from, to, _lookSpeed * Time.deltaTime);
+        }
     }
 }
