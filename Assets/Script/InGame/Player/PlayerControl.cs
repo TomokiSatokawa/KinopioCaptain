@@ -26,6 +26,10 @@ namespace InGame.Player
         public bool IsGround => _isGround;
         void Update()
         {
+        }
+
+        private void FixedUpdate()
+        {
             var forward = _cameraTransform.forward;
             var right = _cameraTransform.right;
 
@@ -46,13 +50,10 @@ namespace InGame.Player
                 LookPlayer(direction);
             }
 
-        }
-
-        private void FixedUpdate()
-        {
             GroundCheck();
             AddGravity();
             ApplyVelocity();
+
         }
 
         private void GroundCheck()
@@ -80,7 +81,7 @@ namespace InGame.Player
 
         private void MovePlayer(Vector3 direction)
         {
-            Vector3 move = direction * _moveSpeed * Time.deltaTime;
+            Vector3 move = direction * _moveSpeed;// * Time.deltaTime;
             _velocity = move;
         }
 
@@ -117,6 +118,7 @@ namespace InGame.Player
 
             //ç‚ÉxÉNÉgÉãÇï‘Ç∑
             Vector3 planeVector = Vector3.ProjectOnPlane(vector, hit.normal);
+            planeVector.Normalize();
             Debug.DrawLine(this.transform.position, this.transform.position + planeVector);
             return planeVector;
         }

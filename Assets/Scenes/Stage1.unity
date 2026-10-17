@@ -1909,6 +1909,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5537062094145994210, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
+      propertyPath: _moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5537062094145994210, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
+      propertyPath: _gravityPower
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5537062094145994210, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
       propertyPath: _cameraTransform
       value: 
       objectReference: {fileID: 205023416}
