@@ -1,35 +1,38 @@
 using Input;
-using UnityEngine;
 using R3;
+using UnityEngine;
 
-public class LightController : MonoBehaviour
+namespace InGame.Player
 {
-    [SerializeField] private Material _LightOn;
-    [SerializeField] private Material _LightOff;
 
-    public GameObject _LightActive;
-
-    public MeshRenderer _LightRender;
-
-    private bool _isLightOn = true;
-
-    void Start()
+    public class LightController : MonoBehaviour
     {
-        InputManager.HeadLight.Subscribe(_ => SwitchLight(!_isLightOn));
-    }
+        [SerializeField] private Renderer _render;
+        [SerializeField] private Material _activeMaterial;
+        [SerializeField] private Material _inactiveMaterial;
+        [SerializeField] private GameObject _spotLight;
 
-    private void SwitchLight(bool isOn)
-    {
-        if (isOn)
+        private bool _isLightOn = true;
+
+        private void Start()
         {
-            _LightRender.material = _LightOn;
-            _LightActive.SetActive(true);
+            InputManager.HeadLight.Subscribe(_ => SwitchLight(!_isLightOn)).RegisterTo(destroyCancellationToken);
+            SwitchLight(false);
         }
-        else
+
+        private void SwitchLight(bool isOn)
         {
-            _LightRender.material = _LightOff;
-            _LightActive.SetActive(false);
+            if (isOn)
+            {
+                _render.material = _activeMaterial;
+            }
+            else
+            {
+                _render.material = _inactiveMaterial;
+            }
+
+            _spotLight.SetActive(isOn);
+            _isLightOn = isOn;
         }
-        _isLightOn = isOn;
     }
 }
