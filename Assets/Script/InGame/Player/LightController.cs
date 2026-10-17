@@ -7,7 +7,9 @@ public class LightController : MonoBehaviour
     [SerializeField] private Material _LightOn;
     [SerializeField] private Material _LightOff;
 
-    public MeshRenderer LightRender;
+    public GameObject _LightActive;
+
+    public MeshRenderer _LightRender;
 
     private bool _isLightOn = true;
 
@@ -20,14 +22,14 @@ public class LightController : MonoBehaviour
     {
         if (isOn)
         {
-            LightRender.material = _LightOn;
+            _LightRender.material = _LightOn;
+            _LightActive.SetActive(true);
         }
         else
         {
-            LightRender.material = _LightOff;
+            _LightRender.material = _LightOff;
+            _LightActive.SetActive(false);
         }
         _isLightOn = isOn;
-
-        Debug.Log("Light is " + (_isLightOn ? "On" : "Off"));
     }
 }
