@@ -6,23 +6,16 @@ namespace InGame.Player
 
     public class PlayerControl : MonoBehaviour
     {
-        [SerializeField] private Rigidbody _playerRigidbody;
-        [SerializeField] private float _gravityPower;
-        [Header("Ground")]
         [SerializeField] private CapsuleCollider _capsuleCollider;
         [SerializeField] private float _groundDistance;
         [SerializeField] private LayerMask _groundLayer;
-        [Header("Move")]
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _moveSpeed = 5f;
         [SerializeField] private float _lookSpeed = 5f;
-        [Header("Slope")]
-        [SerializeField] private float _slopeRayPos;
-        [SerializeField] private float _slopeRayDistance;
-
+        [SerializeField] private float _gravityPower;
+        [SerializeField] private Rigidbody _playerRigidbody;
         private Vector3 _velocity;
         private bool _isGround;
-
         public bool IsGround => _isGround;
         void Update()
         {
@@ -38,8 +31,7 @@ namespace InGame.Player
             var input = InputManager.Move.normalized;
             var direction = input.x * right + input.y * forward;
 
-            var moveVector = CalculateMovementVector(direction);
-            MovePlayer(moveVector);
+            MovePlayer(direction);
 
             if (direction.magnitude > 0f)
             {
@@ -80,7 +72,7 @@ namespace InGame.Player
 
         private void MovePlayer(Vector3 direction)
         {
-            Vector3 move = direction * _moveSpeed * Time.deltaTime;
+            Vector3 move = new Vector3(direction.x, 0, direction.z) * _moveSpeed * Time.deltaTime;
             _velocity = move;
         }
 
@@ -102,23 +94,6 @@ namespace InGame.Player
             Quaternion from = transform.rotation;
             Quaternion to = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.RotateTowards(from, to, _lookSpeed * Time.deltaTime);
-        }
-
-        private Vector3 CalculateMovementVector(Vector3 vector)
-        {
-            Vector3 rayPosition = this.transform.position + this.transform.forward * _slopeRayPos;
-            var ray = new Ray(rayPosition, -this.transform.up);
-
-            Debug.DrawRay(ray.origin, ray.direction * _slopeRayDistance,Color.green);
-
-            //前方から下に向けてRayを飛ばす
-            if (!Physics.Raycast(ray, out var hit, _slopeRayDistance))
-                return vector;//Hitしなければ移動ベクトルを返す
-
-            //坂ベクトルを返す
-            Vector3 planeVector = Vector3.ProjectOnPlane(vector, hit.normal);
-            Debug.DrawLine(this.transform.position, this.transform.position + planeVector);
-            return planeVector;
         }
     }
 }
