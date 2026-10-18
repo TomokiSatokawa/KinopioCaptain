@@ -6,7 +6,7 @@ namespace InGame.Player
     /// <summary>
     /// プレイヤーのステータスを管理する
     /// </summary>
-    public class PlayerStatus : MonoBehaviour
+    public class PlayerStatus
     {
         private readonly ReactiveProperty<int> _coin = new();
         private readonly ReactiveProperty<int> _jewelry = new();
