@@ -12,6 +12,15 @@ public class CoinPlant : MonoBehaviour, IInteractable
 
     private int _remainingCoinCount;
 
+    private void Awake()
+    {
+        if (_leavesObject == null || _plantRenderer == null || _availableMaterial == null || _usedMaterial == null)
+        {
+            Debug.LogError("[CoinPlant] 必須のInspector参照が設定されていません。", this);
+            enabled = false;
+        }
+    }
+
     private void Start()
     {
         //1以上の数値にする
@@ -37,7 +46,7 @@ public class CoinPlant : MonoBehaviour, IInteractable
 
         // コインを獲得して残数を減らす
         GameManager.Instance.Status.AddCoin();
-        _remainingCoinCount --;
+        _remainingCoinCount--;
 
         // コインがなくなったら使用済みの状態にする
         if (_remainingCoinCount <= 0)

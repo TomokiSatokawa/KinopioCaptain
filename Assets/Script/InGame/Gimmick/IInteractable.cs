@@ -1,5 +1,8 @@
 namespace InGame.Gimmick
 {
+    /// <summary>
+    /// ゲームオブジェクトのインタラクション操作を定義するインターフェース
+    /// </summary>
     public interface IInteractable
     {
         /// <summary>

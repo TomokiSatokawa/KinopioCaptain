@@ -10,35 +10,35 @@ namespace InGame.Common
     {
         [SerializeField] private bool _isTrigger;
 
-        public event Action<GameObject> OnEnter;
-        public event Action<GameObject> OnExit;
+        public event Action<GameObject> OnContactEnter;
+        public event Action<GameObject> OnContactExit;
 
         private void OnCollisionEnter(Collision collision)
         {
             if (_isTrigger) return;
 
-            OnEnter?.Invoke(collision.gameObject);
+            OnContactEnter?.Invoke(collision.gameObject);
         }
 
         private void OnCollisionExit(Collision collision)
         {
             if (_isTrigger) return;
 
-            OnExit?.Invoke(collision.gameObject);
+            OnContactExit?.Invoke(collision.gameObject);
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if(!_isTrigger) return;
 
-            OnEnter?.Invoke(other.gameObject);
+            OnContactEnter?.Invoke(other.gameObject);
         }
 
         private void OnTriggerExit(Collider other)
         {
             if (!_isTrigger) return;
 
-            OnExit?.Invoke(other.gameObject);
+            OnContactExit?.Invoke(other.gameObject);
         }
     }
 }

@@ -15,8 +15,8 @@ namespace InGame.Player
 
         private void Start()
         {
-            InputManager.Interact.Subscribe(_ => Interact()).RegisterTo(destroyCancellationToken);
             _filter = new(_detector);
+            InputManager.Interact.Subscribe(_ => Interact()).RegisterTo(destroyCancellationToken);
         }
 
         public void Interact()
@@ -29,6 +29,11 @@ namespace InGame.Player
                 interactable.Interact();
                 break;
             }
+        }
+
+        private void OnDestroy()
+        {
+            _filter?.Dispose();
         }
     }
 }

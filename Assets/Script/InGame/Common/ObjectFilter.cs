@@ -10,29 +10,24 @@ namespace InGame.Common
     /// <typeparam name="T">検出対象のコンポーネント型</typeparam>
     public class ObjectFilter<T>
     {
-        private readonly List<T> _filteredObjects  = new(); 
+        private readonly List<T> _filteredObjects = new();
         private readonly ObjectDetector _detector;
         private readonly Func<T, bool> _filterPredicate;
 
         /// <summary> フィルタリング済みオブジェクトの読み取り専用リスト </summary>
-        public IReadOnlyList<T> FilteredObjects  => _filteredObjects ;
+        public IReadOnlyList<T> FilteredObjects => _filteredObjects;
 
         /// <summary>
         /// 検出イベントを購読し、フィルタリングを開始する
         /// </summary>
-        public ObjectFilter(ObjectDetector detector,Func<T,bool> filterPredicate  = null)
+        public ObjectFilter(ObjectDetector detector, Func<T, bool> filterPredicate = null)
         {
-            if (detector == null)
-            {
-                Debug.LogError("[ObjectFilter] ObjectDetector is null.");
-                return;
-            }
+            _detector = detector ?? throw new ArgumentNullException(nameof(detector));
 
-            _detector = detector;
-            _detector.OnEnter += OnEnter;
-            _detector.OnExit += OnExit;
+            _detector.OnContactEnter += OnEnter;
+            _detector.OnContactExit += OnExit;
 
-            _filterPredicate = filterPredicate ;
+            _filterPredicate = filterPredicate;
         }
 
         private void OnEnter(GameObject target)
@@ -52,7 +47,7 @@ namespace InGame.Common
             if (_filterPredicate != null && !_filterPredicate(component))
                 return;
 
-            _filteredObjects .Add(component);
+            _filteredObjects.Add(component);
         }
 
         private void OnExit(GameObject target)
@@ -60,7 +55,10 @@ namespace InGame.Common
             if (target == null)
                 return;
 
-            _filteredObjects.RemoveAll(x => x.Equals(target));
+            if (!target.TryGetComponent(out T component))
+                return;
+
+            _filteredObjects.Remove(component);
         }
 
         /// <summary>
@@ -70,8 +68,8 @@ namespace InGame.Common
         {
             if (_detector != null)
             {
-                _detector.OnEnter -= OnEnter;
-                _detector.OnExit -= OnExit;
+                _detector.OnContactEnter -= OnEnter;
+                _detector.OnContactExit -= OnExit;
             }
 
             _filteredObjects.Clear();
