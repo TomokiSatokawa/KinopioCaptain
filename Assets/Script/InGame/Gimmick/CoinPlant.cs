@@ -8,25 +8,35 @@ public class CoinPlant : MonoBehaviour, IInteractable
     [SerializeField] private Renderer _baseRenderer;
     [SerializeField] private Material _availableMaterial;
     [SerializeField] private Material _usedMaterial;
+    [SerializeField] private int _maxCoinCount;
 
-    private bool _isUsed = false;
+    private int _currentCoinCount;
 
     private void Start()
     {
         _baseRenderer.material = _availableMaterial;
+
+        //1ˆÈã‚Ì”’l‚É‚·‚é
+        _maxCoinCount = Mathf.Clamp(_maxCoinCount, 1, int.MaxValue);
+
+        _currentCoinCount = _maxCoinCount;
         _leafObject.SetActive(true);
     }
 
     public bool CanInteract()
     {
-        return !_isUsed;
+        return _currentCoinCount > 0;
     }
 
     public void Interact()
     {
         GameManager.Instance.Status.AddCoin();
-        _baseRenderer.material = _usedMaterial;
-        _leafObject.SetActive(false);
-        _isUsed = true;
+        _currentCoinCount --;
+
+        if (_currentCoinCount <= 0)
+        {
+            _baseRenderer.material = _usedMaterial;
+            _leafObject.SetActive(false);
+        }
     }
 }
