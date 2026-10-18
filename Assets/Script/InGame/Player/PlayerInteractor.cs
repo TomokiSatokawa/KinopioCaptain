@@ -12,6 +12,7 @@ namespace InGame.Player
         [SerializeField] private ObjectDetector _detector;
 
         private ObjectFilter<IInteractable> _filter;
+
         private void Start()
         {
             InputManager.Interact.Subscribe(_ => Interact()).RegisterTo(destroyCancellationToken);
@@ -21,9 +22,12 @@ namespace InGame.Player
         public void Interact()
         {
             Debug.Log("インタラクト");
-            foreach(var a in _filter.FilteredObjects )
+            foreach (var interactable in _filter.FilteredObjects)
             {
-                Debug.Log(a);
+                if (!interactable.CanInteract()) continue;
+
+                interactable.Interact();
+                break;
             }
         }
     }
