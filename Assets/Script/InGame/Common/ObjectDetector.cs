@@ -4,7 +4,7 @@ using UnityEngine;
 namespace InGame.Common
 {
     /// <summary>
-    /// Colliderに触れている検出イベントを出す
+    /// CollisionまたはTriggerによる接触・退出イベントを通知する
     /// </summary>
     public class ObjectDetector : MonoBehaviour
     {

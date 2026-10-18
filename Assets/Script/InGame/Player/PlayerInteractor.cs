@@ -21,7 +21,7 @@ namespace InGame.Player
         public void Interact()
         {
             Debug.Log("インタラクト");
-            foreach(var a in _filter.Fillters)
+            foreach(var a in _filter.FilteredObjects )
             {
                 Debug.Log(a);
             }
