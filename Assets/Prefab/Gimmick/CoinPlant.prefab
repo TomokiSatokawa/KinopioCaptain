@@ -248,10 +248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04377a3c923261949ba9c935cb296bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinPlant
-  _leafObject: {fileID: 8389887385208251190}
-  _baseRenderer: {fileID: 7322704746217958765}
+  _leavesObject: {fileID: 8389887385208251190}
+  _plantRenderer: {fileID: 7322704746217958765}
   _availableMaterial: {fileID: 2100000, guid: ea9646649ffc526468c09611e06c6745, type: 2}
   _usedMaterial: {fileID: 2100000, guid: d1f8d972c95dfc448947d1e2fb07a475, type: 2}
+  _initialCoinCount: 0
 --- !u!1 &7505202380508725613
 GameObject:
   m_ObjectHideFlags: 0
