@@ -21,7 +21,7 @@ namespace InGame.Player
 
         public void Interact()
         {
-            Debug.Log("インタラクト");
+            //インタラクトできるものを探す
             foreach (var interactable in _filter.FilteredObjects)
             {
                 if (!interactable.CanInteract()) continue;

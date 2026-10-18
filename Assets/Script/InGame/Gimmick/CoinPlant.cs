@@ -1,3 +1,4 @@
+using InGame;
 using InGame.Gimmick;
 using UnityEngine;
 
@@ -23,6 +24,7 @@ public class CoinPlant : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        GameManager.Instance.Status.AddCoin();
         _baseRenderer.material = _usedMaterial;
         _leafObject.SetActive(false);
         _isUsed = true;

@@ -641,7 +641,6 @@ GameObject:
   - component: {fileID: 4792069353147115874}
   - component: {fileID: 1731807174119552438}
   - component: {fileID: 5537062094145994210}
-  - component: {fileID: 605119591398336112}
   - component: {fileID: 2470408980133758693}
   m_Layer: 3
   m_Name: Player
@@ -720,18 +719,6 @@ MonoBehaviour:
   _lookSpeed: 500
   _slopeRayPos: 0.5
   _slopeRayDistance: 2
---- !u!114 &605119591398336112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7345945145011430889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be74de58e551a2c4f8bb9a467ff9a89e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InGame.Player.PlayerStatus
 --- !u!114 &2470408980133758693
 MonoBehaviour:
   m_ObjectHideFlags: 0
