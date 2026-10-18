@@ -1,9 +1,21 @@
 using InGame.Gimmick;
 using UnityEngine;
 
-public class CoinPlant : MonoBehaviour,IInteractable
+public class CoinPlant : MonoBehaviour, IInteractable
 {
+    [SerializeField] private GameObject _leafObject;
+    [SerializeField] private Renderer _baseRenderer;
+    [SerializeField] private Material _availableMaterial;
+    [SerializeField] private Material _usedMaterial;
+
     private bool _isUsed = false;
+
+    private void Start()
+    {
+        _baseRenderer.material = _availableMaterial;
+        _leafObject.SetActive(true);
+    }
+
     public bool CanInteract()
     {
         return !_isUsed;
@@ -11,7 +23,8 @@ public class CoinPlant : MonoBehaviour,IInteractable
 
     public void Interact()
     {
-        Debug.Log("GetCoin");
+        _baseRenderer.material = _usedMaterial;
+        _leafObject.SetActive(false);
         _isUsed = true;
     }
 }
