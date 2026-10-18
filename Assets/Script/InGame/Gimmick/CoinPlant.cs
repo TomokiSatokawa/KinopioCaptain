@@ -4,39 +4,49 @@ using UnityEngine;
 
 public class CoinPlant : MonoBehaviour, IInteractable
 {
-    [SerializeField] private GameObject _leafObject;
-    [SerializeField] private Renderer _baseRenderer;
+    [SerializeField] private GameObject _leavesObject;
+    [SerializeField] private Renderer _plantRenderer;
     [SerializeField] private Material _availableMaterial;
     [SerializeField] private Material _usedMaterial;
-    [SerializeField] private int _maxCoinCount;
+    [SerializeField] private int _initialCoinCount;
 
-    private int _currentCoinCount;
+    private int _remainingCoinCount;
 
     private void Start()
     {
-        _baseRenderer.material = _availableMaterial;
-
         //1以上の数値にする
-        _maxCoinCount = Mathf.Clamp(_maxCoinCount, 1, int.MaxValue);
+        _initialCoinCount = Mathf.Clamp(_initialCoinCount, 1, int.MaxValue);
+        // 初期コイン数を設定する
+        _remainingCoinCount = _initialCoinCount;
 
-        _currentCoinCount = _maxCoinCount;
-        _leafObject.SetActive(true);
+        // 使用可能な状態
+        _plantRenderer.material = _availableMaterial;
+        _leavesObject.SetActive(true);
     }
 
     public bool CanInteract()
     {
-        return _currentCoinCount > 0;
+        return _remainingCoinCount > 0;
     }
 
     public void Interact()
     {
-        GameManager.Instance.Status.AddCoin();
-        _currentCoinCount --;
+        // コインが残っていない場合は処理しない
+        if (!CanInteract())
+            return;
 
-        if (_currentCoinCount <= 0)
-        {
-            _baseRenderer.material = _usedMaterial;
-            _leafObject.SetActive(false);
-        }
+        // コインを獲得して残数を減らす
+        GameManager.Instance.Status.AddCoin();
+        _remainingCoinCount --;
+
+        // コインがなくなったら使用済みの状態にする
+        if (_remainingCoinCount <= 0)
+            SetUsedState();
+    }
+
+    private void SetUsedState()
+    {
+        _plantRenderer.material = _usedMaterial;
+        _leavesObject.SetActive(false);
     }
 }
