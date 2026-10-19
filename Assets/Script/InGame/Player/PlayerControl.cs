@@ -1,5 +1,7 @@
+using InGame.Stage;
 using Input;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace InGame.Player
 {
@@ -22,6 +24,9 @@ namespace InGame.Player
 
         private Vector3 _velocity;
         private bool _isGround;
+
+        //うごく床インターフェース(乗っていない場合は null)
+        private IMovingFloor _movingFloor;
 
         public bool IsGround => _isGround;
         void Update()
@@ -56,6 +61,9 @@ namespace InGame.Player
 
         }
 
+        /// <summary>
+        /// 接地判定
+        /// </summary>
         private void GroundCheck()
         {
             Vector3 bottomPosition = _capsuleCollider.transform.TransformPoint(
@@ -69,14 +77,19 @@ namespace InGame.Player
             Vector3 point1 = bottomPosition + transform.up * radius;
             Vector3 point2 = point1 + transform.up * 0.01f;
 
+            //あたっているものを取得
             _isGround = Physics.CapsuleCast(
                 point1,
                 point2,
                 radius,
                 -transform.up,
+                out var hit,
                 _groundDistance,
                 _groundLayer
             );
+
+            //うごく床だった場合うごく床のインターフェースを保存
+            _movingFloor = _isGround ? hit.collider.GetComponentInParent<IMovingFloor>() : null;
         }
 
         private void MovePlayer(Vector3 direction)
@@ -92,9 +105,16 @@ namespace InGame.Player
                 _velocity = -Vector3.up * _gravityPower;
             }
         }
-        
+
         private void ApplyVelocity()
         {
+            //うごく床にのっていた場合 _velocityにうごく床のPowerを加算
+            if (_movingFloor != null)
+            {
+                _velocity += _movingFloor.Power;
+            }
+
+            //velocity適応
             _playerRigidbody.linearVelocity = _velocity;
         }
 
@@ -110,7 +130,7 @@ namespace InGame.Player
             Vector3 rayPosition = this.transform.position + this.transform.forward * _slopeRayPos;
             var ray = new Ray(rayPosition, -this.transform.up);
 
-            Debug.DrawRay(ray.origin, ray.direction * _slopeRayDistance,Color.green);
+            Debug.DrawRay(ray.origin, ray.direction * _slopeRayDistance, Color.green);
 
             //前方から下に向けてRayを飛ばす
             if (!Physics.Raycast(ray, out var hit, _slopeRayDistance))
