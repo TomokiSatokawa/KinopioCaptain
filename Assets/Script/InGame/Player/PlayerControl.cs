@@ -1,5 +1,7 @@
+using InGame.Stage;
 using Input;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace InGame.Player
 {
