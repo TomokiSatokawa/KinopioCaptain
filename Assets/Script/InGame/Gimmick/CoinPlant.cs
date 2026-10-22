@@ -2,24 +2,11 @@ using InGame;
 using InGame.Gimmick;
 using UnityEngine;
 
-public class CoinPlant : MonoBehaviour, IInteractable
+public class CoinPlant : PlantBase, IInteractable
 {
-    [SerializeField] private GameObject _leavesObject;
-    [SerializeField] private Renderer _plantRenderer;
-    [SerializeField] private Material _availableMaterial;
-    [SerializeField] private Material _usedMaterial;
     [SerializeField] private int _initialCoinCount;
 
     private int _remainingCoinCount;
-
-    private void Awake()
-    {
-        if (_leavesObject == null || _plantRenderer == null || _availableMaterial == null || _usedMaterial == null)
-        {
-            Debug.LogError("[CoinPlant] 必須のInspector参照が設定されていません。", this);
-            enabled = false;
-        }
-    }
 
     private void Start()
     {
@@ -29,8 +16,7 @@ public class CoinPlant : MonoBehaviour, IInteractable
         _remainingCoinCount = _initialCoinCount;
 
         // 使用可能な状態
-        _plantRenderer.material = _availableMaterial;
-        _leavesObject.SetActive(true);
+        SetState(true);
     }
 
     public bool CanInteract()
@@ -50,12 +36,6 @@ public class CoinPlant : MonoBehaviour, IInteractable
 
         // コインがなくなったら使用済みの状態にする
         if (_remainingCoinCount <= 0)
-            SetUsedState();
-    }
-
-    private void SetUsedState()
-    {
-        _plantRenderer.material = _usedMaterial;
-        _leavesObject.SetActive(false);
+            SetState(false);
     }
 }
