@@ -8,7 +8,7 @@ namespace InGame.Item
 
         public string Name => _name;
 
-        public void PullItem()
+        public void OnPlayerTouch()
         {
             Debug.Log($"{Name}‚ğˆø‚Á‚±”²‚¢‚½I");
         }

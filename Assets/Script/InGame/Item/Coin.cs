@@ -1,36 +1,29 @@
 using InGame.Item;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Coin : MonoBehaviour, ICollectible
 {
     [SerializeField] private string _name = "defaultItemName";
-    [SerializeField] private float move = 0.5f;
-    [SerializeField] private float movespeed = 1f;
+    [SerializeField] private float _move = 0.5f;
+    [SerializeField] private float _moveSpeed = 1f;
 
-    private Vector3 firstPosition;
+    private Vector3 _firstPosition;
 
     public string Name => _name;
 
-    public void PullItem()
+    public void OnPlayerTouch()
     {
-            Destroy(this.gameObject);
+        Destroy(this.gameObject);
     }
 
-    public void OnCollisionEnter(Collision collision)
+    private void Start()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            PullItem();
-        }
+        _firstPosition = transform.position;//基準の座標
     }
-    void Start()
+
+    private void Update()
     {
-        firstPosition = transform.position;//基準の座標
-    }
-    void Update()
-    {
-        float y = Mathf.Sin(Time.time * movespeed) * move;//オブジェクトのY座標の高さ計算
-        transform.position = firstPosition + new Vector3(0,y,0);//計算した物を使ってオブジェクトを動かす
+        float y = Mathf.Sin(Time.time * _moveSpeed) * _move;//オブジェクトのY座標の高さ計算
+        transform.position = _firstPosition + new Vector3(0, y, 0);//計算した物を使ってオブジェクトを動かす
     }
 }

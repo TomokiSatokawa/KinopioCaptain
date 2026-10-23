@@ -10,7 +10,7 @@ namespace InGame.Player
         {
             if (other.gameObject.TryGetComponent(out ICollectible itemData))
             {
-                itemData.PullItem();
+                itemData.OnPlayerTouch();
             }
         }
     }
