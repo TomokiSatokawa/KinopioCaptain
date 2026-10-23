@@ -4,6 +4,9 @@ namespace InGame.Item
     {
         public string Name { get; }
 
-        public void PullItem();
+        /// <summary>
+        /// ƒvƒŒƒCƒ„[‚ªG‚ê‚½
+        /// </summary>
+        public void OnPlayerTouch();
     }
 }
