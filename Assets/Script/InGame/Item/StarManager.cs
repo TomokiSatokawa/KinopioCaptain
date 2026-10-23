@@ -1,40 +1,36 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace InGame.Item
 {
     public class StarManager : MonoBehaviour
     {
+        [SerializeField] private int _rotNum = 3;
         [SerializeField] private float _endPosY = 5;
-        [SerializeField] private float _speed = 5;
+        [SerializeField] private float _moveSpeed = 5;
         [SerializeField] private float _maxDistance = 50;
 
-        private Vector3 _endPos;
-        private bool _isMoving = true;
+        private float _angle = 0;
 
         void Start()
         {
-            SetMoveDistance(CheckRay());
+            _angle = 360 * _rotNum;
+            AnimateGem();
         }
 
         void Update()
         {
-            if (_isMoving)
-            {
-                if (Vector3.Distance(transform.position, _endPos) > 0.01f)
-                {
-                    transform.position = Vector3.MoveTowards(
-                        transform.position,
-                        _endPos,
-                        _speed * Time.deltaTime
-                    );
-                }
-            }
+
         }
 
-        private void SetMoveDistance(float _distance)
+        public void AnimateGem()
         {
-            _endPos = transform.position;
-            _endPos.y += _distance;
+            DOTween.Sequence()
+                    .Join(this.transform.DOMoveY(CheckRay(), _moveSpeed))
+                    .SetRelative()
+                    .Join(this.transform.DORotate(new Vector3(0, _angle, 0), _moveSpeed, RotateMode.FastBeyond360))
+                    .SetRelative()
+                    .OnComplete(() => { Destroy(this.gameObject); });
         }
 
         private float CheckRay()
