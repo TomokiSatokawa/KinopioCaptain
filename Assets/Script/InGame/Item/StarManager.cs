@@ -8,7 +8,8 @@ namespace InGame.Item
         [SerializeField] private float _speed = 5;
         [SerializeField] private float _maxDistance = 50;
 
-        Vector3 _endPos;
+        private Vector3 _endPos;
+        private bool _isMoving = true;
 
         void Start()
         {
@@ -17,13 +18,16 @@ namespace InGame.Item
 
         void Update()
         {
-            if (Vector3.Distance(transform.position, _endPos) > 0.01f)
+            if (_isMoving)
             {
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    _endPos,
-                    _speed * Time.deltaTime
-                );
+                if (Vector3.Distance(transform.position, _endPos) > 0.01f)
+                {
+                    transform.position = Vector3.MoveTowards(
+                        transform.position,
+                        _endPos,
+                        _speed * Time.deltaTime
+                    );
+                }
             }
         }
 
