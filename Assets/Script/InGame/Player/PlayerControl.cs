@@ -1,23 +1,39 @@
+using InGame.Stage;
 using Input;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace InGame.Player
 {
 
     public class PlayerControl : MonoBehaviour
     {
+        [SerializeField] private Rigidbody _playerRigidbody;
+        [SerializeField] private float _gravityPower;
+        [Header("Ground")]
         [SerializeField] private CapsuleCollider _capsuleCollider;
         [SerializeField] private float _groundDistance;
         [SerializeField] private LayerMask _groundLayer;
+        [Header("Move")]
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _moveSpeed = 5f;
         [SerializeField] private float _lookSpeed = 5f;
-        [SerializeField] private float _gravityPower;
-        [SerializeField] private Rigidbody _playerRigidbody;
+        [Header("Slope")]
+        [SerializeField] private float _slopeRayPos;
+        [SerializeField] private float _slopeRayDistance;
+
         private Vector3 _velocity;
         private bool _isGround;
+
+        //うごく床インターフェース(乗っていない場合は null)
+        private IMovingFloor _movingFloor;
+
         public bool IsGround => _isGround;
         void Update()
+        {
+        }
+
+        private void FixedUpdate()
         {
             var forward = _cameraTransform.forward;
             var right = _cameraTransform.right;
@@ -31,22 +47,23 @@ namespace InGame.Player
             var input = InputManager.Move.normalized;
             var direction = input.x * right + input.y * forward;
 
-            MovePlayer(direction);
+            var moveVector = CalculateMovementVector(direction);
+            MovePlayer(moveVector);
 
             if (direction.magnitude > 0f)
             {
                 LookPlayer(direction);
             }
 
-        }
-
-        private void FixedUpdate()
-        {
             GroundCheck();
             AddGravity();
             ApplyVelocity();
+
         }
 
+        /// <summary>
+        /// 接地判定
+        /// </summary>
         private void GroundCheck()
         {
             Vector3 bottomPosition = _capsuleCollider.transform.TransformPoint(
@@ -60,19 +77,24 @@ namespace InGame.Player
             Vector3 point1 = bottomPosition + transform.up * radius;
             Vector3 point2 = point1 + transform.up * 0.01f;
 
+            //あたっているものを取得
             _isGround = Physics.CapsuleCast(
                 point1,
                 point2,
                 radius,
                 -transform.up,
+                out var hit,
                 _groundDistance,
                 _groundLayer
             );
+
+            //うごく床だった場合うごく床のインターフェースを保存
+            _movingFloor = _isGround ? hit.collider.GetComponentInParent<IMovingFloor>() : null;
         }
 
         private void MovePlayer(Vector3 direction)
         {
-            Vector3 move = new Vector3(direction.x, 0, direction.z) * _moveSpeed * Time.deltaTime;
+            Vector3 move = direction * _moveSpeed;// * Time.deltaTime;
             _velocity = move;
         }
 
@@ -83,9 +105,16 @@ namespace InGame.Player
                 _velocity = -Vector3.up * _gravityPower;
             }
         }
-        
+
         private void ApplyVelocity()
         {
+            //うごく床にのっていた場合 _velocityにうごく床のPowerを加算
+            if (_movingFloor != null)
+            {
+                _velocity += _movingFloor.Power;
+            }
+
+            //velocity適応
             _playerRigidbody.linearVelocity = _velocity;
         }
 
@@ -94,6 +123,24 @@ namespace InGame.Player
             Quaternion from = transform.rotation;
             Quaternion to = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.RotateTowards(from, to, _lookSpeed * Time.deltaTime);
+        }
+
+        private Vector3 CalculateMovementVector(Vector3 vector)
+        {
+            Vector3 rayPosition = this.transform.position + this.transform.forward * _slopeRayPos;
+            var ray = new Ray(rayPosition, -this.transform.up);
+
+            Debug.DrawRay(ray.origin, ray.direction * _slopeRayDistance, Color.green);
+
+            //前方から下に向けてRayを飛ばす
+            if (!Physics.Raycast(ray, out var hit, _slopeRayDistance))
+                return vector;//Hitしなければ移動ベクトルを返す
+
+            //坂ベクトルを返す
+            Vector3 planeVector = Vector3.ProjectOnPlane(vector, hit.normal);
+            planeVector.Normalize();
+            Debug.DrawLine(this.transform.position, this.transform.position + planeVector);
+            return planeVector;
         }
     }
 }
