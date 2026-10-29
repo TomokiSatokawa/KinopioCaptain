@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace InGame.Player
 {
+    /// <summary>
+    /// プレイヤーの装備位置と装備オブジェクトを管理するクラス。
+    /// </summary>
     public class PlayerEquipment : MonoBehaviour
     {
         [SerializeField] private EquipmentPositionData[] _positionDatas;
@@ -18,12 +21,18 @@ namespace InGame.Player
             public Transform Position => _position;
         }
 
-        private Dictionary<EquipmentPosition, GameObject> _equipmentObject = new ();
+        private Dictionary<EquipmentPosition, GameObject> _equipmentObject = new();
 
         public void Equip(EquipmentPosition positionType, GameObject equipment)
         {
+            if (equipment == null)
+            {
+                Debug.LogError("[PlayerEquipment] 装備オブジェクトが null です。");
+                return;
+            }
+
             //既に装備済みではないか調べる
-            if(_equipmentObject.TryGetValue(positionType, out var obj) && obj != null)
+            if (_equipmentObject.TryGetValue(positionType, out var obj) && obj != null)
             {
                 Debug.LogError($"[PlayerEquipment] 二重装備をしようとしました。Position:{positionType} Equipment:{equipment}");
                 return;
@@ -42,10 +51,10 @@ namespace InGame.Player
         public GameObject Remove(EquipmentPosition positionType)
         {
             //装備品があるか調べる
-            if (!_equipmentObject.TryGetValue(positionType, out var equipment) && equipment == null)
+            if (!_equipmentObject.TryGetValue(positionType, out var equipment) || equipment == null)
             {
                 Debug.LogError($"[PlayerEquipment] 装備がありません。Position:{positionType}");
-                return　null;
+                return null;
             }
 
             //親子関係を解除する
@@ -60,7 +69,7 @@ namespace InGame.Player
         private Transform GetPosition(EquipmentPosition type)
         {
             var data = _positionDatas.FirstOrDefault(x => x.Type == type);
-            if(data == null)
+            if (data == null)
             {
                 Debug.LogError($"[PlayerEquipment]　装備位置が見つかりません。 type:{type}");
                 return null;

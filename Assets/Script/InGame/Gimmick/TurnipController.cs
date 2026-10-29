@@ -1,11 +1,13 @@
 using System;
-using System.Threading;
 using Input;
 using R3;
 using UnityEngine;
 
 namespace InGame.Gimmick
 {
+    /// <summary>
+    /// カブの投擲軌道、衝突判定、破棄演出を管理するクラス。
+    /// </summary>
     public class TurnipController : MonoBehaviour
     {
         [SerializeField] private GameObject _destructionEffect;
@@ -18,18 +20,17 @@ namespace InGame.Gimmick
         [SerializeField] private float _deleteDuration;
 
         private bool _isThrew = false;
-        private CancellationTokenSource _token;
         private Action _throwAction;
         private float _timer;
         private Vector3 _startPosition;
         private Vector3 _endPosition;
         private Vector3 _controlPosition;
+        private bool _isBroken;
 
         //投げるところ
         private void Start()
         {
-            _token = new();
-            InputManager.Interact.Subscribe(_ => Throw()).RegisterTo(_token.Token);
+            InputManager.Interact.Subscribe(_ => Throw()).RegisterTo(destroyCancellationToken);
         }
 
         public void Initialize(Action throwAction)
@@ -69,12 +70,10 @@ namespace InGame.Gimmick
 
         private void Throw()
         {
-            _token?.Cancel();
-            _token?.Dispose();
-            _token = null;
+            if (_isThrew || _isBroken) return;
 
             _isThrew = true;
-            _throwAction.Invoke();
+            _throwAction?.Invoke();
             _timer = 0;
 
             _startPosition = this.transform.position;
@@ -104,18 +103,13 @@ namespace InGame.Gimmick
 
         private void BreakTurnip()
         {
+            if (_isBroken) return;
+
+            _isBroken = true;
+
             Destroy(this.gameObject);
             Instantiate(_destructionEffect, this.transform.position, Quaternion.identity);
             Instantiate(_coinAddEffect, this.transform.position + Vector3.up, Quaternion.identity);
-        }
-
-        private void OnDestroy()
-        {
-            if (_token != null)
-            {
-                _token?.Cancel();
-                _token?.Dispose();
-            }
         }
     }
 }

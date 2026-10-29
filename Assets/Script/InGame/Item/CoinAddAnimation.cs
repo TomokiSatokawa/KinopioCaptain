@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class CoinAddAnimation : MonoBehaviour
 {
+    /// <summary>
+    /// コイン獲得エフェクトの移動、回転、フェードを制御するクラス。
+    /// </summary>
     [SerializeField] private Renderer _renderer;
     [SerializeField] private float _upAmount;
     [SerializeField] private float _duration;
@@ -19,6 +22,12 @@ public class CoinAddAnimation : MonoBehaviour
         Play();
     }
 
+    private void OnDisable()
+    {
+        _sequence?.Kill();
+        _sequence = null;
+    }
+
     public void Play()
     {
         _sequence?.Kill();
@@ -33,7 +42,7 @@ public class CoinAddAnimation : MonoBehaviour
 
         //カメラに向ける
         var cameraPos = Camera.main.transform.position;
-        cameraPos.y= _startPosition.y;
+        cameraPos.y = _startPosition.y;
         var rotation = Quaternion.LookRotation(cameraPos - transform.position);
         transform.rotation = rotation;
 
