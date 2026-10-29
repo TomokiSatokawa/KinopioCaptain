@@ -11,6 +11,7 @@ namespace InGame.Gimmick
         [SerializeField] private LayerMask _groundLayer;
         [SerializeField] private float _duration;
         [SerializeField] private Vector3 _controlOffset;
+        [SerializeField] private float _rotationSpeed;
         [SerializeField] private float _distance;
         [SerializeField] private float _deleteDuration;
 
@@ -46,15 +47,12 @@ namespace InGame.Gimmick
                 Destroy(this.gameObject);
             }
 
+            //‹Èü‚ğ•`‚¢‚Ä—‚¿‚é
             if (t <= 1f)
             {
-                transform.position = CalRouteCurve(
-                    _startPosition,
-                    _endPosition,
-                    _controlPosition,
-                    t
-                );
+                transform.position = CalRouteCurve(_startPosition, _endPosition, _controlPosition, t);
             }
+            //‹ÈüŠO‚É‚¢‚Á‚½‚ç‚»‚Ì—¬‚ê‚Å“®‚­
             else
             {
                 Vector3 velocity = 2f * (_endPosition - _controlPosition) / _duration;
@@ -62,6 +60,9 @@ namespace InGame.Gimmick
 
                 transform.position = _endPosition + velocity * excessTime;
             }
+
+            //‰ñ“]‚·‚é
+            transform.rotation *= Quaternion.Euler(_rotationSpeed * Time.deltaTime,0f,0f);
         }
 
         private void Throw()

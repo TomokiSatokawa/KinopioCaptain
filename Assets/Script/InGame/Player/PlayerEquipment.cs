@@ -52,7 +52,7 @@ namespace InGame.Player
             equipment.transform.parent = null;
 
             //“o˜^‰ğœ
-            equipment = null;
+            _equipmentObject[positionType] = null;
 
             return equipment;
         }
