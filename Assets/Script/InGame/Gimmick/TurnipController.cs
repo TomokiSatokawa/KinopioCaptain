@@ -8,6 +8,8 @@ namespace InGame.Gimmick
 {
     public class TurnipController : MonoBehaviour
     {
+        [SerializeField] private GameObject _destructionEffect;
+        [SerializeField] private GameObject _coinAddEffect;
         [SerializeField] private LayerMask _groundLayer;
         [SerializeField] private float _duration;
         [SerializeField] private Vector3 _controlOffset;
@@ -44,7 +46,7 @@ namespace InGame.Gimmick
 
             if (_timer >= _deleteDuration)
             {
-                Destroy(this.gameObject);
+                BreakTurnip();
             }
 
             //‹Èü‚ğ•`‚¢‚Ä—‚¿‚é
@@ -62,7 +64,7 @@ namespace InGame.Gimmick
             }
 
             //‰ñ“]‚·‚é
-            transform.rotation *= Quaternion.Euler(_rotationSpeed * Time.deltaTime,0f,0f);
+            transform.rotation *= Quaternion.Euler(_rotationSpeed * Time.deltaTime, 0f, 0f);
         }
 
         private void Throw()
@@ -95,8 +97,16 @@ namespace InGame.Gimmick
 
             if ((_groundLayer & (1 << other.gameObject.layer)) != 0)
             {
-                Destroy(this.gameObject);
+                GameManager.Instance.Status.AddCoin();
+                BreakTurnip();
             }
+        }
+
+        private void BreakTurnip()
+        {
+            Destroy(this.gameObject);
+            Instantiate(_destructionEffect, this.transform.position, Quaternion.identity);
+            Instantiate(_coinAddEffect, this.transform.position + Vector3.up, Quaternion.identity);
         }
 
         private void OnDestroy()

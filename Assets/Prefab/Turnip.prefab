@@ -315,6 +315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705a8fe7cb2727b4bb73d49cbd4868cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGame.Gimmick.TurnipController
+  _destructionEffect: {fileID: 3632879821489312298, guid: f5ea19f5d89cb044da8f8c2ef3645113, type: 3}
+  _coinAddEffect: {fileID: 6020468458537752405, guid: b615476cf4137704cbeba510fdd9e1ff, type: 3}
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
