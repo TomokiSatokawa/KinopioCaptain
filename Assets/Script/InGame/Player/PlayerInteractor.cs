@@ -11,6 +11,8 @@ namespace InGame.Player
     {
         [SerializeField] private ObjectDetector _detector;
 
+        public bool IgnoreInteract = false;
+
         private ObjectFilter<IInteractable> _filter;
 
         private void Start()
@@ -21,6 +23,8 @@ namespace InGame.Player
 
         public void Interact()
         {
+            if (IgnoreInteract) return;
+
             //インタラクトできるものを探す
             foreach (var interactable in _filter.FilteredObjects)
             {

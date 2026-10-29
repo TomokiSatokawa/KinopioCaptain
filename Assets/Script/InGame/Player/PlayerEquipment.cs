@@ -51,6 +51,9 @@ namespace InGame.Player
             //eqŠÖŒW‚ğ‰ğœ‚·‚é
             equipment.transform.parent = null;
 
+            //“o˜^‰ğœ
+            equipment = null;
+
             return equipment;
         }
 
