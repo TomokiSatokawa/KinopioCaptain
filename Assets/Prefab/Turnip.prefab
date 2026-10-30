@@ -319,9 +319,10 @@ MonoBehaviour:
   _coinAddEffect: {fileID: 6020468458537752405, guid: b615476cf4137704cbeba510fdd9e1ff, type: 3}
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
   _duration: 0.5
   _controlOffset: {x: 0, y: 3, z: 2}
   _rotationSpeed: 500
   _distance: 5
   _deleteDuration: 10
+  _damageAmount: 1

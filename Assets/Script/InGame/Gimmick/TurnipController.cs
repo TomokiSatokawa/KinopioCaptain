@@ -18,6 +18,7 @@ namespace InGame.Gimmick
         [SerializeField] private float _rotationSpeed;
         [SerializeField] private float _distance;
         [SerializeField] private float _deleteDuration;
+        [SerializeField] private int _damageAmount;
 
         private bool _isThrew = false;
         private Action _throwAction;
@@ -98,6 +99,9 @@ namespace InGame.Gimmick
             {
                 GameManager.Instance.Status.AddCoin();
                 BreakTurnip();
+
+                if (other.gameObject.TryGetComponent(out IDamageble damageble))
+                    damageble.Damage(_damageAmount);
             }
         }
 
