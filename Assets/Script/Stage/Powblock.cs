@@ -1,6 +1,7 @@
 using UnityEngine;
 using InGame.Item;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 public class Powblock : MonoBehaviour,IDamageble
 {
@@ -15,19 +16,25 @@ public class Powblock : MonoBehaviour,IDamageble
         HP -= 1;
         if (HP < 1)
         {
-            Destroy(this.gameObject);
+            // 指定した範囲内のすべてのBlockコライダーを検出
+            Collider[] hitBlocks = Physics.OverlapSphere(detectionCenter, detectionRadius, hitBlocksLayer);
+            if (hitBlocks.Length > 1)
+            {
+                foreach (Collider Block in hitBlocks)
+                {
+                    Debug.Log("Block");
+                    Destroy(Block.gameObject);
+                }
+            }
+            this.transform.DOMoveY(1.5f, 0.1f).OnComplete(() => { this.transform.DOMoveY(1, 0.2f).OnComplete(() => { Destroy(this.gameObject); }); });
+            //this.transform.DOMoveY(1, 0.5f).OnComplete(() => { Destroy(this.gameObject); }); 
         }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // 指定した範囲内のすべての敵コライダーを検出
-        Collider[] hitBlocks = Physics.OverlapSphere(detectionCenter, detectionRadius, hitBlocksLayer);
-        if(hitBlocks.Length > 1)
-        {
-
-        }
+        
     }
 
     // Update is called once per frame
