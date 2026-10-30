@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace InGame.Item
 {
-    public class StarManager : MonoBehaviour
+    public class StarManager : MonoBehaviour , ICollectible
     {
         [SerializeField] private int _rotNum = 3;
         [SerializeField] private float _endPosY = 5;
@@ -11,11 +11,11 @@ namespace InGame.Item
         [SerializeField] private float _maxDistance = 50;
 
         private float _angle = 0;
+        public string Name => "ïÛêŒ";
 
         void Start()
         {
             _angle = 360 * _rotNum;
-            AnimateGem();
         }
 
         void Update()
@@ -48,6 +48,11 @@ namespace InGame.Item
             }
              
             return _endPosY;
+        }
+
+        public void OnPlayerTouch()
+        {
+            AnimateGem();
         }
     }
 }
