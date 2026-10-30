@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace InGame.Item
 {
-    public class StarManager : MonoBehaviour , ICollectible
+    public class GemManager : MonoBehaviour , ICollectible
     {
         [SerializeField] private int _rotNum = 3;
         [SerializeField] private float _endPosY = 5;
@@ -53,6 +53,7 @@ namespace InGame.Item
         public void OnPlayerTouch()
         {
             AnimateGem();
+            GameManager.Instance.Status.AddJewelry();
         }
     }
 }
