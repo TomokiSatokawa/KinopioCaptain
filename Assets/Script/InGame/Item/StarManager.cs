@@ -25,11 +25,18 @@ namespace InGame.Item
 
         public void AnimateGem()
         {
+            float moveDistance = CheckRay();
+
             DOTween.Sequence()
-                    .Join(this.transform.DOMoveY(CheckRay(), _moveSpeed))
-                    .SetRelative()
-                    .Join(this.transform.DORotate(new Vector3(0, _angle, 0), _moveSpeed, RotateMode.FastBeyond360))
-                    .SetRelative()
+                    .Join(this.transform.DORotate(new Vector3(0, _angle, 0), _moveSpeed, RotateMode.FastBeyond360).SetEase(Ease.InOutSine));
+
+            DOTween.Sequence()
+                    .Append(this.transform.DOMoveY(moveDistance, _moveSpeed / 2)
+                    .SetEase(Ease.InOutSine)
+                    .SetRelative())
+                    .Append(this.transform.DOMoveY(-moveDistance, _moveSpeed / 2)
+                    .SetEase(Ease.InOutSine)
+                    .SetRelative())
                     .OnComplete(() => { Destroy(this.gameObject); });
         }
 
