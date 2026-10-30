@@ -29,6 +29,14 @@ namespace InGame.Player
         [SerializeField] private float _zoomDuration;
         [SerializeField] private Ease _zoomEase;
 
+        [Header("Shake")]
+        [SerializeField] private float _shakeStrength = 0.3f;   // 横揺れの強さ
+        [SerializeField] private float _shakeDuration = 0.4f;
+        [SerializeField] private int _shakeVibrato = 15;        // 揺れる回数の目安
+        [SerializeField, Range(0, 1)] private float _shakeElasticity = 0.5f;
+
+        private Tween _shakeTween;
+
         private int _currentZoomIndex;
         private Tween _zoomTween;
         private Tween _quickRotationTween;
@@ -102,6 +110,22 @@ namespace InGame.Player
                     _currentEuler.y = angle;
                     _cameraOrigin.rotation = Quaternion.Euler(_currentEuler);
                 });
+        }
+
+        /// <summary>横揺れのカメラシェイク(Inspectorの値を使用)</summary>
+        public void Shake()
+        {
+            // 前回のシェイクが残っていれば元の位置に戻してから再開する
+            _shakeTween?.Complete();
+
+            // カメラのローカルX方向(画面の横方向)に揺らす
+            _shakeTween = _camera
+                .DOPunchPosition(Vector3.right * _shakeStrength, _shakeDuration, _shakeVibrato, _shakeElasticity);
+        }
+
+        private void OnDestroy()
+        {
+            _shakeTween?.Kill();
         }
     }
 }
