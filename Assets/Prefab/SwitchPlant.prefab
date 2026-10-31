@@ -113,7 +113,7 @@ MonoBehaviour:
   _switchBaseRenderer: {fileID: 7280768375686922029}
   _switchOnMaterial: {fileID: 2100000, guid: d1f8d972c95dfc448947d1e2fb07a475, type: 2}
   _raiseTarget: {fileID: 6638080858961096586}
-  _raiseHeight: 0.5
+  _raiseHeight: 1.472
   _raiseDuration: 0.25
   _raiseEase: 20
   _onInteract:

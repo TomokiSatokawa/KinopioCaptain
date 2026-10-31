@@ -500,6 +500,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3141354691236616119}
     m_Modifications:
+    - target: {fileID: 3238771145205906031, guid: 40487a32d73cf3f4da888da8389ff7c7, type: 3}
+      propertyPath: m_MotionVectors
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4286166421543688825, guid: 40487a32d73cf3f4da888da8389ff7c7, type: 3}
       propertyPath: _onSwitchOn.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -555,6 +559,18 @@ PrefabInstance:
     - target: {fileID: 6254187095330067635, guid: 40487a32d73cf3f4da888da8389ff7c7, type: 3}
       propertyPath: m_Name
       value: SwitchPlant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638080858961096586, guid: 40487a32d73cf3f4da888da8389ff7c7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638080858961096586, guid: 40487a32d73cf3f4da888da8389ff7c7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638080858961096586, guid: 40487a32d73cf3f4da888da8389ff7c7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6737533109216693769, guid: 40487a32d73cf3f4da888da8389ff7c7, type: 3}
       propertyPath: m_LocalPosition.x
