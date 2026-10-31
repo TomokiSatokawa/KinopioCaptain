@@ -19,7 +19,7 @@ namespace InGame.Player
         [SerializeField] private float _verticalSpeed;
         [SerializeField] private FloatRange _verticalRotationRange;
         [SerializeField] private float _quickRotationSpeed;
-        [SerializeField,Range(0,180)] private float _quickRotationAngle;
+        [SerializeField, Range(0, 180)] private float _quickRotationAngle;
         [Header("Position")]
         [SerializeField] private FloatRange _originPositionRangeZ;
         [SerializeField] private float _followSmoothTime;
@@ -77,7 +77,7 @@ namespace InGame.Player
         {
             var pos = _cameraOrigin.position;
             var clampedPlayerPos = _originPositionRangeZ.Clamp(_playerPosition.position.z);
-            pos .z = Mathf.Lerp(pos.z, clampedPlayerPos, Time.deltaTime * _followSmoothTime);
+            pos.z = Mathf.Lerp(pos.z, clampedPlayerPos, Time.deltaTime * _followSmoothTime);
             _cameraOrigin.position = pos;
         }
 
@@ -113,14 +113,13 @@ namespace InGame.Player
         }
 
         /// <summary>横揺れのカメラシェイク(Inspectorの値を使用)</summary>
-        public void Shake()
+        public void Shake(float duration = 0.3f)
         {
             // 前回のシェイクが残っていれば元の位置に戻してから再開する
             _shakeTween?.Complete();
 
             // カメラのローカルX方向(画面の横方向)に揺らす
-            _shakeTween = _camera
-                .DOPunchPosition(Vector3.right * _shakeStrength, _shakeDuration, _shakeVibrato, _shakeElasticity);
+            _shakeTween = _camera.DOPunchPosition(Vector3.right * _shakeStrength, duration,Mathf.RoundToInt(_shakeVibrato * duration), _shakeElasticity);
         }
 
         private void OnDestroy()
