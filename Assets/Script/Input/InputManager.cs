@@ -13,6 +13,7 @@ namespace Input
         private static Subject<Unit> _zoom = new();
         private static Subject<Unit> _headLight = new();
         private static Subject<Unit> _interact = new();
+        private static ReactiveProperty<bool> _dash = new();
         private static ReactiveProperty<bool> _cameraRotationLeft = new();
         private static ReactiveProperty<bool> _cameraRotationRight = new();
 
@@ -21,6 +22,7 @@ namespace Input
         public static Observable<Unit> Zoom => _zoom;
         public static Observable<Unit> HeadLight => _headLight;
         public static Observable<Unit> Interact => _interact;
+        public static ReadOnlyReactiveProperty<bool> Dash => _dash;
         public static ReadOnlyReactiveProperty<bool> CameraRotationLeft => _cameraRotationLeft;
         public static ReadOnlyReactiveProperty<bool> CameraRotationRight => _cameraRotationRight;
 
@@ -35,6 +37,7 @@ namespace Input
             SubscribeEvent(_gameInputs.Player.Zoom, OnZoom);
             SubscribeEvent(_gameInputs.Player.HeadLight, OnHeadLight);
             SubscribeEvent(_gameInputs.Player.Interact, OnInteract);
+            SubscribeEvent(_gameInputs.Player.Dash, OnDash);
             SubscribeEvent(_gameInputs.Player.CameraRotationLeft, OnCameraRotationLeft);
             SubscribeEvent(_gameInputs.Player.CameraRotationRight, OnCameraRotationRight);
 
@@ -79,6 +82,11 @@ namespace Input
         {
             if (context.ReadValueAsButton())
                 _interact.OnNext(Unit.Default);
+        }
+
+        public void OnDash(InputAction.CallbackContext context)
+        {
+            _dash.Value = context.ReadValueAsButton();
         }
 
         public void OnCameraRotationLeft(InputAction.CallbackContext context)
