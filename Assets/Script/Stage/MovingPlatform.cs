@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace InGame.Stage
 {
@@ -22,6 +24,7 @@ namespace InGame.Stage
         [SerializeField] private bool _playOnStart = true;
         [SerializeField] private bool _pingPong = false;
         [SerializeField] private float _waitTime = 1f;
+        [SerializeField] private UnityEvent _onReachedTarget;   // ã‚ª‚è‚«‚Á‚½‚Æ‚«(–Ú“I’n“’…)‚ÉŒÄ‚Î‚ê‚é
 
         private Vector3 _startPos;
         private Vector3 _targetPos;
@@ -78,6 +81,7 @@ namespace InGame.Stage
             do
             {
                 yield return MoveTo(_targetPos);
+                _onReachedTarget?.Invoke();   // © ’Ç‰Á
 
                 if (!_pingPong) break;
 
