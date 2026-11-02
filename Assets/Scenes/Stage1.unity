@@ -869,6 +869,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGame.UI.RemainingLivesView
   _livesCount: {fileID: 483099179}
+--- !u!1001 &669997620
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.977
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 26.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242794557887616031, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4644397027683919263, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: _cutInPlayer
+      value: 
+      objectReference: {fileID: 6939809515197802905}
+    - target: {fileID: 7888710557157632831, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
+      propertyPath: m_Name
+      value: Star
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8c8693dc771c7d94a8d34eb9667b19ea, type: 3}
 --- !u!1 &810319599
 GameObject:
   m_ObjectHideFlags: 0
@@ -1599,7 +1660,7 @@ MonoBehaviour:
   _quickRotationAngle: 45
   _originPositionRangeZ:
     _min: -7
-    _max: 15
+    _max: 30
   _followSmoothTime: 5
   _zoomAmount:
   - -15
@@ -1821,17 +1882,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3181643628582520868, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
+      propertyPath: _gameCamera
+      value: 
+      objectReference: {fileID: 205023415}
     - target: {fileID: 4792069353147115874, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.66921
+      value: 8.091353
       objectReference: {fileID: 0}
     - target: {fileID: 4792069353147115874, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.26
+      value: 1.087
       objectReference: {fileID: 0}
     - target: {fileID: 4792069353147115874, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.7950773
+      value: -2.24
       objectReference: {fileID: 0}
     - target: {fileID: 4792069353147115874, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1874,6 +1939,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
+--- !u!114 &6939809515197802905 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3181643628582520868, guid: cdb4478e8ef9d78419849dabadc941de, type: 3}
+  m_PrefabInstance: {fileID: 6939809515197802900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82fcc0afbe2b25840a9025df2de384f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InGame.Common.CutInPlayer
 --- !u!1001 &8314935777464785342
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1946,3 +2022,4 @@ SceneRoots:
   - {fileID: 8314935777464785342}
   - {fileID: 6758767582054138075}
   - {fileID: 810319601}
+  - {fileID: 669997620}
