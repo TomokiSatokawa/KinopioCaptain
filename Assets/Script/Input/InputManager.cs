@@ -98,5 +98,13 @@ namespace Input
         {
             _cameraRotationRight.Value = context.ReadValueAsButton();
         }
+
+        public static void SetEnabled(bool enabled)
+        {
+            if(enabled)
+                _gameInputs.Enable();
+            else
+                _gameInputs.Disable();
+        }
     }
 }

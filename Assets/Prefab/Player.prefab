@@ -502,7 +502,7 @@ Animator:
   m_GameObject: {fileID: 5143136819603073709}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 480909a9e9b61d14e800f6a36a103468, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -835,6 +835,7 @@ GameObject:
   - component: {fileID: 2470408980133758693}
   - component: {fileID: 5528327923800221696}
   - component: {fileID: 5910379260766074959}
+  - component: {fileID: 3181643628582520868}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -955,3 +956,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9ac50fb7c26d9428b45512278dac64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGame.Player.ItemDetection
+--- !u!114 &3181643628582520868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7345945145011430889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82fcc0afbe2b25840a9025df2de384f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InGame.Common.CutInPlayer
+  _cutInCamera: {fileID: 5021648724543248881}
+  _gameCamera: {fileID: 0}
+  _startTimeline: {fileID: 11400000, guid: 85aa163065e3fda4eb095c53074fcb3a, type: 2}

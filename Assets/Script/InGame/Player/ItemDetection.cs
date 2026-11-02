@@ -8,7 +8,7 @@ namespace InGame.Player
     {
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.TryGetComponent(out ICollectible itemData))
+            if (other.transform.TryGetComponent(out ICollectible itemData))
             {
                 itemData.OnPlayerTouch();
             }
