@@ -4,7 +4,7 @@ using UnityEngine.Playables;
 
 namespace InGame.Common
 {
-    public class CutInPlayer : MonoBehaviour
+    public class CutInController : MonoBehaviour
     {
         [SerializeField] private Camera _cutInCamera;
         [SerializeField] private Camera _gameCamera;
@@ -16,6 +16,18 @@ namespace InGame.Common
 
         public void StartFollowCamera(Transform target)
         {
+            if (target == null)
+            {
+                Debug.LogError("[CutInPlayer] í«è]ëŒè€Ç™ê›íËÇ≥ÇÍÇƒÇ¢Ç‹ÇπÇÒ");
+                return;
+            }
+
+            if (_cutInCamera == null || _gameCamera == null)
+            {
+                Debug.LogError("[CutInPlayer] ÉJÉÅÉâÇ™ê›íËÇ≥ÇÍÇƒÇ¢Ç‹ÇπÇÒ");
+                return;
+            }
+
             _cutInCamera.gameObject.SetActive(true);
             _gameCamera.gameObject.SetActive(false);
             _cutInCameraPosition = target;
@@ -27,13 +39,17 @@ namespace InGame.Common
             _cutInCamera.gameObject.SetActive(false);
             _gameCamera.gameObject.SetActive(true);
             _cutInCameraPosition = null;
+            _playAsset = null;
             InputManager.SetEnabled(true);
         }
 
         public void LookDirection(Vector3 direction)
         {
-            direction.y = 0;
-            this.transform.forward = direction;
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude <= 0.0001f) return;
+
+            transform.forward = direction.normalized;
         }
 
         public void SetPosition(Vector3 pos)
@@ -54,6 +70,7 @@ namespace InGame.Common
             if (Time.time - _startTime >= _playAsset.duration)
             {
                 End();
+                return;
             }
 
             if (_cutInCameraPosition != null)

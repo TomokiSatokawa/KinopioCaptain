@@ -12,20 +12,20 @@ namespace InGame.Item
         [SerializeField] private PlayableAsset _asset;
         [SerializeField] private Transform _cutInCameraPosition;
         [SerializeField] private PlayableDirector _playableDirector;
-        [SerializeField] private CutInPlayer _cutInPlayer;
+        [SerializeField] private CutInController _cutInPlayer;
 
-        private bool _isRotation = true;  
+        private bool _isRotating  = true;  
         public string Name => "Star";
 
-        public void Update()
+        private void Update()
         {
-            if (!_isRotation) return;
+            if (!_isRotating ) return;
             _mesh.rotation *= Quaternion.Euler(0, _rotationSpeed * Time.deltaTime, 0);
         }
 
         public void OnPlayerTouch()
         {
-            _isRotation = false;
+            _isRotating  = false;
             _playableDirector.Play(_asset);
             _collider.enabled = false;
         }
