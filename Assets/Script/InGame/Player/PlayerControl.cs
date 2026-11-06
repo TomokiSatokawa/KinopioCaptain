@@ -10,6 +10,7 @@ namespace InGame.Player
     {
         [SerializeField] private Rigidbody _playerRigidbody;
         [SerializeField] private float _gravityPower;
+        [SerializeField] private GameObject _gameObject;
         [Header("Ground")]
         [SerializeField] private CapsuleCollider _capsuleCollider;
         [SerializeField] private float _groundDistance;
@@ -17,6 +18,7 @@ namespace InGame.Player
         [Header("Move")]
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _moveSpeed = 5f;
+        [SerializeField] private float _dashSpeed = 10f;
         [SerializeField] private float _lookSpeed = 5f;
         [Header("Slope")]
         [SerializeField] private float _slopeRayPos;
@@ -25,10 +27,15 @@ namespace InGame.Player
         private Vector3 _velocity;
         private bool _isGround;
 
+
         //うごく床インターフェース(乗っていない場合は null)
         private IMovingFloor _movingFloor;
 
         public bool IsGround => _isGround;
+        void Start()
+        {
+            _gameObject.SetActive(false);
+        }
         void Update()
         {
         }
@@ -58,6 +65,8 @@ namespace InGame.Player
             GroundCheck();
             AddGravity();
             ApplyVelocity();
+
+            
 
         }
 
@@ -94,8 +103,25 @@ namespace InGame.Player
 
         private void MovePlayer(Vector3 direction)
         {
-            Vector3 move = direction * _moveSpeed;// * Time.deltaTime;
+
+            float speed;
+
+            bool b = InputManager.Dash.CurrentValue;
+            if (b)
+            {
+                speed = _dashSpeed;
+                _gameObject.SetActive(true);
+            }
+            else
+            {
+                speed = _moveSpeed;
+                _gameObject.SetActive(false);
+            }
+
+            Vector3 move = direction * speed;// * Time.deltaTime;
             _velocity = move;
+
+            
         }
 
         private void AddGravity()
