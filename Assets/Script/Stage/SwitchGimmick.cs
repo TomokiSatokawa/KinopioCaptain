@@ -9,12 +9,12 @@ namespace InGame.Gimmick
     public class SwitchGimmick : MonoBehaviour, IInteractable
     {
         [Header("引っこ抜き(上昇アニメーション完了後に実行)")]
-        [SerializeField] private GameObject _switchEraseObject;   // 引っこ抜いたら消すオブジェクト
+        [SerializeField] private GameObject _switchEraseObject;
         [SerializeField] private Renderer _switchBaseRenderer;
-        [SerializeField] private Material _switchOnMaterial;      // 使用済み(全Elementに適用)
+        [SerializeField] private Material _switchOnMaterial;
 
         [Header("上昇アニメーション (DOTween)")]
-        [SerializeField] private Transform _raiseTarget;          // 上げるオブジェクト
+        [SerializeField] private Transform _raiseTarget;
         [SerializeField] private float _raiseHeight = 0.5f;
         [SerializeField] private float _raiseDuration = 0.5f;
         [SerializeField] private Ease _raiseEase = Ease.OutQuad;
@@ -38,7 +38,6 @@ namespace InGame.Gimmick
 
         private void Start()
         {
-            // 使用可能な状態
             _isUsed = false;
             _switchEraseObject.SetActive(true);
         }
@@ -50,7 +49,6 @@ namespace InGame.Gimmick
 
         public void Interact()
         {
-            // すでに使用済みの場合は処理しない
             if (!CanInteract())
                 return;
 
@@ -71,7 +69,6 @@ namespace InGame.Gimmick
 
         private void SetUsedState()
         {
-            // すべてのElementを使用済みマテリアルに差し替える
             Material[] mats = _switchBaseRenderer.materials;
             for (int i = 0; i < mats.Length; i++)
             {

@@ -1,5 +1,6 @@
 using InGame.Stage;
 using Input;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,6 +29,8 @@ namespace InGame.Player
         //うごく床インターフェース(乗っていない場合は null)
         private IMovingFloor _movingFloor;
 
+        public bool IsMovingInteract = true;
+
         public bool IsGround => _isGround;
         void Update()
         {
@@ -45,6 +48,7 @@ namespace InGame.Player
             right.Normalize();
 
             var input = InputManager.Move.normalized;
+            if (!IsMovingInteract) input = Vector2.zero;
             var direction = input.x * right + input.y * forward;
 
             var moveVector = CalculateMovementVector(direction);
