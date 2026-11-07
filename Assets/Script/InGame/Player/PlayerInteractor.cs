@@ -1,9 +1,7 @@
+using System;
 using Cysharp.Threading.Tasks;
 using InGame.Common;
 using InGame.Gimmick;
-using Input;
-using R3;
-using System;
 using UnityEngine;
 
 namespace InGame.Player
@@ -18,7 +16,6 @@ namespace InGame.Player
         public bool IsInteractStop = false;
 
         private ObjectFilter<IInteractable> _filter;
-
 
         private void Start()
         {
@@ -38,26 +35,28 @@ namespace InGame.Player
                 if (!interactable.CanInteract()) continue;
 
                 interactable.Interact();
-                Stillness().Forget();
+                Stillness(interactable).Forget();
                 break;
             }
         }
 
-        private async UniTask Stillness()
+        private async UniTask Stillness(IInteractable interactable)
         {
-            _playerControl.IsMovingInteract = false;
+            //移動を無効化
+            var token = _playerControl.IgnoreMoveInput.RegisterFlag();
             IsInteractStop = true;
 
 
             try
             {
-                await UniTask.WaitForSeconds(0.1f, cancellationToken: destroyCancellationToken);
+                await UniTask.WaitForSeconds(interactable.InteractDuration, cancellationToken: destroyCancellationToken);
             }
             catch (OperationCanceledException)
             {
             }
 
-            _playerControl.IsMovingInteract = true;
+            //移動を有効化
+            _playerControl.IgnoreMoveInput.UnregisterFlag(token);
             IsInteractStop = false;
         }
 

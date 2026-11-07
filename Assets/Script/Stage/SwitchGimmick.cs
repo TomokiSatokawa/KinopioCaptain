@@ -23,6 +23,8 @@ namespace InGame.Gimmick
         [SerializeField] private UnityEvent _onInteract;
         [SerializeField] private UnityEvent _onSwitchOn;
 
+        public float InteractDuration => _raiseDuration;
+
         private bool _isUsed;
         private Sequence _sequence;
 

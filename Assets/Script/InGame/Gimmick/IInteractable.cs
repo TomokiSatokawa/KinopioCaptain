@@ -5,6 +5,8 @@ namespace InGame.Gimmick
     /// </summary>
     public interface IInteractable
     {
+        public float InteractDuration { get; }
+
         /// <summary>
         /// Žg—p‰Â”\‚©‚Ç‚¤‚©‚ðŽæ“¾‚·‚é
         /// </summary>

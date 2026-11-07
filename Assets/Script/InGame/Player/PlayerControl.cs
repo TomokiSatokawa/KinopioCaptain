@@ -1,6 +1,5 @@
+using CoreKit;
 using InGame.Stage;
-using Input;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace InGame.Player
@@ -31,7 +30,8 @@ namespace InGame.Player
         //うごく床インターフェース(乗っていない場合は null)
         private IMovingFloor _movingFloor;
 
-        public bool IsMovingInteract = true;
+        /// <summary> 移動不可にする </summary>
+        public readonly FlagRegistry IgnoreMoveInput = new();
 
         public bool IsGround => _isGround;
 
@@ -51,8 +51,10 @@ namespace InGame.Player
             forward.Normalize();
             right.Normalize();
 
-            var input = InputManager.Move.normalized;
-            if (!IsMovingInteract) input = Vector2.zero;
+            var input = InputService.Player.Move.Value;
+
+            if (IgnoreMoveInput.Flag) input = Vector2.zero;
+
             var direction = input.x * right + input.y * forward;
 
             var moveVector = CalculateMovementVector(direction);
@@ -112,7 +114,7 @@ namespace InGame.Player
             {
                 speed = _dashSpeed;
 
-                if(direction.magnitude > 0f && _dustCloudEffect.isStopped)
+                if (direction.magnitude > 0f && _dustCloudEffect.isStopped)
                     _dustCloudEffect.Play();
             }
             else
