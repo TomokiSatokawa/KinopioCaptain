@@ -5,7 +5,7 @@ using UnityEngine;
 namespace InGame.Player
 {
     /// <summary>
-    /// ƒJƒƒ‰§Œä
+    /// ã‚«ãƒ¡ãƒ©åˆ¶å¾¡
     /// </summary>
     public class CameraControl : MonoBehaviour
     {
@@ -28,9 +28,9 @@ namespace InGame.Player
         [SerializeField] private Ease _zoomEase;
 
         [Header("Shake")]
-        [SerializeField] private float _shakeStrength = 0.3f;   // ‰¡—h‚ê‚Ì‹­‚³
+        [SerializeField] private float _shakeStrength = 0.3f;
         [SerializeField] private float _shakeDuration = 0.4f;
-        [SerializeField] private int _shakeVibrato = 15;        // —h‚ê‚é‰ñ”‚Ì–ÚˆÀ
+        [SerializeField] private int _shakeVibrato = 15;
         [SerializeField, Range(0, 1)] private float _shakeElasticity = 0.5f;
 
         private Tween _shakeTween;
@@ -83,10 +83,10 @@ namespace InGame.Player
 
         private void SwitchZoom()
         {
-            //ƒY[ƒ€’†‚ÍƒY[ƒ€‚µ‚È‚¢
+            //ã‚ºãƒ¼ãƒ ä¸­ã¯ã‚ºãƒ¼ãƒ ã—ãªã„
             if (_zoomTween?.active ?? false) return;
 
-            //Ÿ‚ÌIndex‚É‚·‚é
+            //æ¬¡ã®Indexã«ã™ã‚‹
             _currentZoomIndex = (_currentZoomIndex + 1) % _zoomAmount.Length;
 
             _zoomTween = _camera.DOLocalMoveZ(_zoomAmount[_currentZoomIndex], _zoomDuration).SetEase(_zoomEase);
@@ -95,7 +95,7 @@ namespace InGame.Player
 
         private void QuickRotation(float amount)
         {
-            //‰ñ“]’†‚Í‰ñ“]‚³‚¹‚È‚¢
+            //å›è»¢ä¸­ã¯å›è»¢ã•ã›ãªã„
             if (_quickRotationTween?.active ?? false) return;
 
             float startAngle = _currentEuler.y;
@@ -112,13 +112,11 @@ namespace InGame.Player
                 });
         }
 
-        /// <summary>‰¡—h‚ê‚ÌƒJƒƒ‰ƒVƒFƒCƒN(Inspector‚Ì’l‚ğg—p)</summary>
         public void Shake(float duration = 0.3f)
         {
-            // ‘O‰ñ‚ÌƒVƒFƒCƒN‚ªc‚Á‚Ä‚¢‚ê‚ÎŒ³‚ÌˆÊ’u‚É–ß‚µ‚Ä‚©‚çÄŠJ‚·‚é
             _shakeTween?.Complete();
 
-            // ƒJƒƒ‰‚Ìƒ[ƒJƒ‹X•ûŒü(‰æ–Ê‚Ì‰¡•ûŒü)‚É—h‚ç‚·
+            // ã‚«ãƒ¡ãƒ©ã®ãƒ­ãƒ¼ã‚«ãƒ«Xæ–¹å‘(ç”»é¢ã®æ¨ªæ–¹å‘)ã«æºã‚‰ã™
             _shakeTween = _camera.DOPunchPosition(Vector3.right * _shakeStrength, duration, Mathf.RoundToInt(_shakeVibrato * duration), _shakeElasticity);
         }
 

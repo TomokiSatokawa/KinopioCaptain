@@ -24,14 +24,13 @@ namespace InGame.Stage
         [SerializeField] private bool _playOnStart = true;
         [SerializeField] private bool _pingPong = false;
         [SerializeField] private float _waitTime = 1f;
-        [SerializeField] private UnityEvent _onReachedTarget;   // 上がりきったとき(目的地到着時)に呼ばれる
+        [SerializeField] private UnityEvent _onReachedTarget;
 
         private Vector3 _startPos;
         private Vector3 _targetPos;
         private Vector3 _lastPos;
         private Coroutine _moveRoutine;
 
-        /// <summary>IMovingFloor: リフトの現在の移動力(ワールド座標, m/s)</summary>
         public Vector3 Power { get; private set; }
 
         private void Awake()
@@ -81,7 +80,7 @@ namespace InGame.Stage
             do
             {
                 yield return MoveTo(_targetPos);
-                _onReachedTarget?.Invoke();   // ← 追加
+                _onReachedTarget?.Invoke();
 
                 if (!_pingPong) break;
 
@@ -114,12 +113,11 @@ namespace InGame.Stage
                 yield return new WaitForFixedUpdate();
             }
 
-            UpdatePlatformPosition(to); // 最終位置のズレ防止
+            UpdatePlatformPosition(to);
             yield return new WaitForFixedUpdate();
             Power = Vector3.zero;
         }
 
-        /// <summary>Rigidbodyで移動し、1ステップ分の移動量から速度を求める</summary>
         private void UpdatePlatformPosition(Vector3 next)
         {
             Power = (next - _lastPos) / Time.fixedDeltaTime;

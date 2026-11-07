@@ -1,4 +1,6 @@
 using InGame.Stage;
+using Input;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace InGame.Player
@@ -26,8 +28,10 @@ namespace InGame.Player
         private bool _isGround;
 
 
-        //‚¤‚²‚­°ƒCƒ“ƒ^[ƒtƒF[ƒX(æ‚Á‚Ä‚¢‚È‚¢ê‡‚Í null)
+        //ã†ã”ãåºŠã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹(ä¹—ã£ã¦ã„ãªã„å ´åˆã¯ null)
         private IMovingFloor _movingFloor;
+
+        public bool IsMovingInteract = true;
 
         public bool IsGround => _isGround;
 
@@ -47,7 +51,8 @@ namespace InGame.Player
             forward.Normalize();
             right.Normalize();
 
-            var input = InputService.Player.Move.Value.normalized;
+            var input = InputManager.Move.normalized;
+            if (!IsMovingInteract) input = Vector2.zero;
             var direction = input.x * right + input.y * forward;
 
             var moveVector = CalculateMovementVector(direction);
@@ -67,7 +72,7 @@ namespace InGame.Player
         }
 
         /// <summary>
-        /// Ú’n”»’è
+        /// æ¥åœ°åˆ¤å®š
         /// </summary>
         private void GroundCheck()
         {
@@ -82,7 +87,7 @@ namespace InGame.Player
             Vector3 point1 = bottomPosition + transform.up * radius;
             Vector3 point2 = point1 + transform.up * 0.01f;
 
-            //‚ ‚½‚Á‚Ä‚¢‚é‚à‚Ì‚ğæ“¾
+            //ã‚ãŸã£ã¦ã„ã‚‹ã‚‚ã®ã‚’å–å¾—
             _isGround = Physics.CapsuleCast(
                 point1,
                 point2,
@@ -93,7 +98,7 @@ namespace InGame.Player
                 _groundLayer
             );
 
-            //‚¤‚²‚­°‚¾‚Á‚½ê‡‚¤‚²‚­°‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX‚ğ•Û‘¶
+            //ã†ã”ãåºŠã ã£ãŸå ´åˆã†ã”ãåºŠã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ä¿å­˜
             _movingFloor = _isGround ? hit.collider.GetComponentInParent<IMovingFloor>() : null;
         }
 
@@ -134,13 +139,13 @@ namespace InGame.Player
 
         private void ApplyVelocity()
         {
-            //‚¤‚²‚­°‚É‚Ì‚Á‚Ä‚¢‚½ê‡ _velocity‚É‚¤‚²‚­°‚ÌPower‚ğ‰ÁZ
+            //ã†ã”ãåºŠã«ã®ã£ã¦ã„ãŸå ´åˆ _velocityã«ã†ã”ãåºŠã®Powerã‚’åŠ ç®—
             if (_movingFloor != null)
             {
                 _velocity += _movingFloor.Power;
             }
 
-            //velocity“K‰
+            //velocityé©å¿œ
             _playerRigidbody.linearVelocity = _velocity;
         }
 
@@ -158,11 +163,11 @@ namespace InGame.Player
 
             Debug.DrawRay(ray.origin, ray.direction * _slopeRayDistance, Color.green);
 
-            //‘O•û‚©‚ç‰º‚ÉŒü‚¯‚ÄRay‚ğ”ò‚Î‚·
+            //å‰æ–¹ã‹ã‚‰ä¸‹ã«å‘ã‘ã¦Rayã‚’é£›ã°ã™
             if (!Physics.Raycast(ray, out var hit, _slopeRayDistance))
-                return vector;//Hit‚µ‚È‚¯‚ê‚ÎˆÚ“®ƒxƒNƒgƒ‹‚ğ•Ô‚·
+                return vector;//Hitã—ãªã‘ã‚Œã°ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¿”ã™
 
-            //âƒxƒNƒgƒ‹‚ğ•Ô‚·
+            //å‚ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¿”ã™
             Vector3 planeVector = Vector3.ProjectOnPlane(vector, hit.normal);
             planeVector.Normalize();
             Debug.DrawLine(this.transform.position, this.transform.position + planeVector);

@@ -1,5 +1,9 @@
+using Cysharp.Threading.Tasks;
 using InGame.Common;
 using InGame.Gimmick;
+using Input;
+using R3;
+using System;
 using UnityEngine;
 
 namespace InGame.Player
@@ -8,16 +12,19 @@ namespace InGame.Player
     public class PlayerInteractor : MonoBehaviour
     {
         [SerializeField] private ObjectDetector _detector;
+        [SerializeField] private PlayerControl _playerControl;
 
         public bool IgnoreInteract = false;
+        public bool IsInteractStop = false;
 
         private ObjectFilter<IInteractable> _filter;
+
 
         private void Start()
         {
             _filter = new(_detector);
 
-            //‰Ÿ‚³‚ê‚½‚ÉƒCƒ“ƒ^ƒ‰ƒNƒgŠÖ”‚ğŒÄ‚Ô
+            //æŠ¼ã•ã‚ŒãŸæ™‚ã«ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆé–¢æ•°ã‚’å‘¼ã¶
             InputService.Player.Interact.OnPressed(Interact);
         }
 
@@ -25,14 +32,33 @@ namespace InGame.Player
         {
             if (IgnoreInteract) return;
 
-            //ƒCƒ“ƒ^ƒ‰ƒNƒg‚Å‚«‚é‚à‚Ì‚ğ’T‚·
+            //ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆã§ãã‚‹ã‚‚ã®ã‚’æ¢ã™
             foreach (var interactable in _filter.FilteredObjects)
             {
                 if (!interactable.CanInteract()) continue;
 
                 interactable.Interact();
+                Stillness().Forget();
                 break;
             }
+        }
+
+        private async UniTask Stillness()
+        {
+            _playerControl.IsMovingInteract = false;
+            IsInteractStop = true;
+
+
+            try
+            {
+                await UniTask.WaitForSeconds(0.1f, cancellationToken: destroyCancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+
+            _playerControl.IsMovingInteract = true;
+            IsInteractStop = false;
         }
 
         private void OnDestroy()
