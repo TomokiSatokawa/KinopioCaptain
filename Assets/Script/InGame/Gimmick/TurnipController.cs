@@ -1,6 +1,4 @@
 using System;
-using Input;
-using R3;
 using UnityEngine;
 
 namespace InGame.Gimmick
@@ -31,7 +29,7 @@ namespace InGame.Gimmick
         //“Š‚°‚é‚Æ‚±‚ë
         private void Start()
         {
-            InputManager.Interact.Subscribe(_ => Throw()).RegisterTo(destroyCancellationToken);
+            InputService.Player.Interact.OnPressed(Throw);
         }
 
         public void Initialize(Action throwAction)

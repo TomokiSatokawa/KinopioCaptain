@@ -1,4 +1,3 @@
-using Input;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -31,7 +30,7 @@ namespace InGame.Common
             _cutInCamera.gameObject.SetActive(true);
             _gameCamera.gameObject.SetActive(false);
             _cutInCameraPosition = target;
-            InputManager.SetEnabled(false);
+            InputService.Player.SetEnabled(false);
         }
 
         private void End()
@@ -40,7 +39,7 @@ namespace InGame.Common
             _gameCamera.gameObject.SetActive(true);
             _cutInCameraPosition = null;
             _playAsset = null;
-            InputManager.SetEnabled(true);
+            InputService.Player.SetEnabled(true);
         }
 
         public void LookDirection(Vector3 direction)
@@ -54,7 +53,7 @@ namespace InGame.Common
 
         public void SetPosition(Vector3 pos)
         {
-            pos.y = this.transform.position .y;
+            pos.y = this.transform.position.y;
             this.transform.position = pos;
         }
         public void PlayCutIn(PlayableAsset playable)
