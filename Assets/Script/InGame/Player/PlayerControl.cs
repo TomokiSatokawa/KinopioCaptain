@@ -1,7 +1,5 @@
 using InGame.Stage;
-using Input;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace InGame.Player
 {
@@ -44,7 +42,7 @@ namespace InGame.Player
             forward.Normalize();
             right.Normalize();
 
-            var input = InputManager.Move.normalized;
+            var input = InputService.Player.Move.Value.normalized;
             var direction = input.x * right + input.y * forward;
 
             var moveVector = CalculateMovementVector(direction);

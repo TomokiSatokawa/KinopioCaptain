@@ -1,7 +1,5 @@
 using InGame.Common;
 using InGame.Gimmick;
-using Input;
-using R3;
 using UnityEngine;
 
 namespace InGame.Player
@@ -18,7 +16,9 @@ namespace InGame.Player
         private void Start()
         {
             _filter = new(_detector);
-            InputManager.Interact.Subscribe(_ => Interact()).RegisterTo(destroyCancellationToken);
+
+            //押された時にインタラクト関数を呼ぶ
+            InputService.Player.Interact.OnPressed(Interact);
         }
 
         public void Interact()

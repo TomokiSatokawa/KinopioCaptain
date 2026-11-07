@@ -1,5 +1,3 @@
-using Input;
-using R3;
 using UnityEngine;
 
 namespace InGame.Player
@@ -16,8 +14,13 @@ namespace InGame.Player
 
         private void Start()
         {
-            InputManager.HeadLight.Subscribe(_ => SwitchLight(!_isLightOn)).RegisterTo(destroyCancellationToken);
             SwitchLight(false);
+        }
+
+        private void Update()
+        {
+            if (InputService.Player.HeadLight.Down)
+                SwitchLight(!_isLightOn);
         }
 
         private void SwitchLight(bool isOn)

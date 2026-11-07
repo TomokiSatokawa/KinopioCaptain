@@ -18,8 +18,10 @@
       "version": "https://github.com/TomokiSatokawa/CoreKitLibrary.git?path=/Packages/com.t0m0.corekit",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "d336b416a8e3569fdaa3b1111505f2d3a28b99a2"
+      "dependencies": {
+        "com.unity.inputsystem": "1.14.0"
+      },
+      "hash": "2dd1fa139cf611782241edd9599f2017b6a6a8f2"
     },
     "com.unity.2d.animation": {
       "version": "13.0.6",

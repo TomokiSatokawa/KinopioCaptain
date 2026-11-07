@@ -1,7 +1,5 @@
 using Common;
 using DG.Tweening;
-using Input;
-using R3;
 using UnityEngine;
 
 namespace InGame.Player
@@ -42,22 +40,24 @@ namespace InGame.Player
         private Tween _quickRotationTween;
         private Vector3 _currentEuler = Vector3.zero;
 
-        private void Start()
-        {
-            InputManager.Zoom.Subscribe(_ => SwitchZoom());
-            InputManager.CameraRotationLeft.Where(x => x).Subscribe(_ => QuickRotation(1));
-            InputManager.CameraRotationRight.Where(x => x).Subscribe(_ => QuickRotation(-1));
-        }
-
         private void Update()
         {
             CameraRotation();
             CameraPosition();
+
+            if (InputService.Player.Zoom.Down)
+                SwitchZoom();
+
+            if (InputService.Player.CameraRotationLeft.Down)
+                QuickRotation(1);
+
+            if (InputService.Player.CameraRotationRight.Down)
+                QuickRotation(-1);
         }
 
         private void CameraRotation()
         {
-            var input = InputManager.Look;
+            var input = InputService.Player.Look.Value;
 
             input.x *= _horizontalSpeed * Time.deltaTime;
             input.y *= _verticalSpeed * Time.deltaTime;
@@ -119,7 +119,7 @@ namespace InGame.Player
             _shakeTween?.Complete();
 
             // ƒJƒƒ‰‚Ìƒ[ƒJƒ‹X•ûŒü(‰æ–Ê‚Ì‰¡•ûŒü)‚É—h‚ç‚·
-            _shakeTween = _camera.DOPunchPosition(Vector3.right * _shakeStrength, duration,Mathf.RoundToInt(_shakeVibrato * duration), _shakeElasticity);
+            _shakeTween = _camera.DOPunchPosition(Vector3.right * _shakeStrength, duration, Mathf.RoundToInt(_shakeVibrato * duration), _shakeElasticity);
         }
 
         private void OnDestroy()

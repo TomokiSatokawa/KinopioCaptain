@@ -1133,7 +1133,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1685686063}
-  - component: {fileID: 1685686062}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -1141,18 +1140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1685686062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1685686061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a70dc6b8ff0d34c9514aad755f16a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Input.InputManager
 --- !u!4 &1685686063
 Transform:
   m_ObjectHideFlags: 0
