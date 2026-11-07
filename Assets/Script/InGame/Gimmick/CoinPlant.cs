@@ -5,8 +5,10 @@ using UnityEngine;
 public class CoinPlant : PlantBase, IInteractable
 {
     [SerializeField] private int _initialCoinCount;
+    [SerializeField] private float _interactDuration = 0.1f;
 
     private int _remainingCoinCount;
+    public float InteractDuration => _interactDuration;
 
     private void Start()
     {

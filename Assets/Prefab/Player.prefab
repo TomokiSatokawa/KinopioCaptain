@@ -5776,7 +5776,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGame.Player.PlayerInteractor
   _detector: {fileID: 6180697981677511554}
+  _playerControl: {fileID: 5537062094145994210}
   IgnoreInteract: 0
+  IsInteractStop: 0
 --- !u!114 &5528327923800221696
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,6 +8,9 @@ namespace InGame.Gimmick
         [SerializeField] private TurnipController _turnipPrefab;
         [SerializeField] private PlayerEquipment _playerEquipment;
         [SerializeField] private PlayerInteractor _interactor;
+        [SerializeField] private float _interactDuration = 0.1f;
+        public float InteractDuration => _interactDuration;
+
         private bool _isUsed = false;
 
         private void Start()
