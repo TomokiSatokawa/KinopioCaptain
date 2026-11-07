@@ -8,7 +8,7 @@ namespace InGame.Player
     {
         [SerializeField] private Rigidbody _playerRigidbody;
         [SerializeField] private float _gravityPower;
-        [SerializeField] private GameObject _gameObject;
+        [SerializeField] private ParticleSystem _dustCloudEffect;
         [Header("Ground")]
         [SerializeField] private CapsuleCollider _capsuleCollider;
         [SerializeField] private float _groundDistance;
@@ -30,12 +30,10 @@ namespace InGame.Player
         private IMovingFloor _movingFloor;
 
         public bool IsGround => _isGround;
-        void Start()
+
+        private void Start()
         {
-            _gameObject.SetActive(false);
-        }
-        void Update()
-        {
+            _dustCloudEffect.Pause();
         }
 
         private void FixedUpdate()
@@ -64,7 +62,7 @@ namespace InGame.Player
             AddGravity();
             ApplyVelocity();
 
-            
+
 
         }
 
@@ -103,23 +101,27 @@ namespace InGame.Player
         {
 
             float speed;
+            bool isDash = InputService.Player.Dash.Key;
 
-            bool b = InputManager.Dash.CurrentValue;
-            if (b)
+            if (isDash)
             {
                 speed = _dashSpeed;
-                _gameObject.SetActive(true);
+
+                if(direction.magnitude > 0f && _dustCloudEffect.isStopped)
+                    _dustCloudEffect.Play();
             }
             else
             {
                 speed = _moveSpeed;
-                _gameObject.SetActive(false);
+
+                if (!_dustCloudEffect.isStopped)
+                    _dustCloudEffect.Stop();
             }
 
-            Vector3 move = direction * speed;// * Time.deltaTime;
+            Vector3 move = direction * speed; //* Time.fixedDeltaTime;
             _velocity = move;
 
-            
+
         }
 
         private void AddGravity()
