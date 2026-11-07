@@ -2,7 +2,6 @@ using InGame.Stage;
 using Input;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace InGame.Player
 {
@@ -11,6 +10,7 @@ namespace InGame.Player
     {
         [SerializeField] private Rigidbody _playerRigidbody;
         [SerializeField] private float _gravityPower;
+        [SerializeField] private ParticleSystem _dustCloudEffect;
         [Header("Ground")]
         [SerializeField] private CapsuleCollider _capsuleCollider;
         [SerializeField] private float _groundDistance;
@@ -18,6 +18,7 @@ namespace InGame.Player
         [Header("Move")]
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _moveSpeed = 5f;
+        [SerializeField] private float _dashSpeed = 10f;
         [SerializeField] private float _lookSpeed = 5f;
         [Header("Slope")]
         [SerializeField] private float _slopeRayPos;
@@ -26,14 +27,17 @@ namespace InGame.Player
         private Vector3 _velocity;
         private bool _isGround;
 
-        //‚¤‚²‚­°ƒCƒ“ƒ^[ƒtƒF[ƒX(æ‚Á‚Ä‚¢‚È‚¢ê‡‚Í null)
+
+        //ã†ã”ãåºŠã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹(ä¹—ã£ã¦ã„ãªã„å ´åˆã¯ null)
         private IMovingFloor _movingFloor;
 
         public bool IsMovingInteract = true;
 
         public bool IsGround => _isGround;
-        void Update()
+
+        private void Start()
         {
+            _dustCloudEffect.Pause();
         }
 
         private void FixedUpdate()
@@ -63,10 +67,12 @@ namespace InGame.Player
             AddGravity();
             ApplyVelocity();
 
+
+
         }
 
         /// <summary>
-        /// Ú’n”»’è
+        /// æ¥åœ°åˆ¤å®š
         /// </summary>
         private void GroundCheck()
         {
@@ -81,7 +87,7 @@ namespace InGame.Player
             Vector3 point1 = bottomPosition + transform.up * radius;
             Vector3 point2 = point1 + transform.up * 0.01f;
 
-            //‚ ‚½‚Á‚Ä‚¢‚é‚à‚Ì‚ğæ“¾
+            //ã‚ãŸã£ã¦ã„ã‚‹ã‚‚ã®ã‚’å–å¾—
             _isGround = Physics.CapsuleCast(
                 point1,
                 point2,
@@ -92,14 +98,35 @@ namespace InGame.Player
                 _groundLayer
             );
 
-            //‚¤‚²‚­°‚¾‚Á‚½ê‡‚¤‚²‚­°‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX‚ğ•Û‘¶
+            //ã†ã”ãåºŠã ã£ãŸå ´åˆã†ã”ãåºŠã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ä¿å­˜
             _movingFloor = _isGround ? hit.collider.GetComponentInParent<IMovingFloor>() : null;
         }
 
         private void MovePlayer(Vector3 direction)
         {
-            Vector3 move = direction * _moveSpeed;// * Time.deltaTime;
+
+            float speed;
+            bool isDash = InputService.Player.Dash.Key;
+
+            if (isDash)
+            {
+                speed = _dashSpeed;
+
+                if(direction.magnitude > 0f && _dustCloudEffect.isStopped)
+                    _dustCloudEffect.Play();
+            }
+            else
+            {
+                speed = _moveSpeed;
+
+                if (!_dustCloudEffect.isStopped)
+                    _dustCloudEffect.Stop();
+            }
+
+            Vector3 move = direction * speed; //* Time.fixedDeltaTime;
             _velocity = move;
+
+
         }
 
         private void AddGravity()
@@ -112,13 +139,13 @@ namespace InGame.Player
 
         private void ApplyVelocity()
         {
-            //‚¤‚²‚­°‚É‚Ì‚Á‚Ä‚¢‚½ê‡ _velocity‚É‚¤‚²‚­°‚ÌPower‚ğ‰ÁZ
+            //ã†ã”ãåºŠã«ã®ã£ã¦ã„ãŸå ´åˆ _velocityã«ã†ã”ãåºŠã®Powerã‚’åŠ ç®—
             if (_movingFloor != null)
             {
                 _velocity += _movingFloor.Power;
             }
 
-            //velocity“K‰
+            //velocityé©å¿œ
             _playerRigidbody.linearVelocity = _velocity;
         }
 
@@ -136,11 +163,11 @@ namespace InGame.Player
 
             Debug.DrawRay(ray.origin, ray.direction * _slopeRayDistance, Color.green);
 
-            //‘O•û‚©‚ç‰º‚ÉŒü‚¯‚ÄRay‚ğ”ò‚Î‚·
+            //å‰æ–¹ã‹ã‚‰ä¸‹ã«å‘ã‘ã¦Rayã‚’é£›ã°ã™
             if (!Physics.Raycast(ray, out var hit, _slopeRayDistance))
-                return vector;//Hit‚µ‚È‚¯‚ê‚ÎˆÚ“®ƒxƒNƒgƒ‹‚ğ•Ô‚·
+                return vector;//Hitã—ãªã‘ã‚Œã°ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¿”ã™
 
-            //âƒxƒNƒgƒ‹‚ğ•Ô‚·
+            //å‚ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¿”ã™
             Vector3 planeVector = Vector3.ProjectOnPlane(vector, hit.normal);
             planeVector.Normalize();
             Debug.DrawLine(this.transform.position, this.transform.position + planeVector);

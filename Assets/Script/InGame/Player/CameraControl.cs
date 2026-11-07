@@ -1,13 +1,11 @@
 using Common;
 using DG.Tweening;
-using Input;
-using R3;
 using UnityEngine;
 
 namespace InGame.Player
 {
     /// <summary>
-    /// ƒJƒƒ‰§Œä
+    /// ã‚«ãƒ¡ãƒ©åˆ¶å¾¡
     /// </summary>
     public class CameraControl : MonoBehaviour
     {
@@ -42,22 +40,24 @@ namespace InGame.Player
         private Tween _quickRotationTween;
         private Vector3 _currentEuler = Vector3.zero;
 
-        private void Start()
-        {
-            InputManager.Zoom.Subscribe(_ => SwitchZoom());
-            InputManager.CameraRotationLeft.Where(x => x).Subscribe(_ => QuickRotation(1));
-            InputManager.CameraRotationRight.Where(x => x).Subscribe(_ => QuickRotation(-1));
-        }
-
         private void Update()
         {
             CameraRotation();
             CameraPosition();
+
+            if (InputService.Player.Zoom.Down)
+                SwitchZoom();
+
+            if (InputService.Player.CameraRotationLeft.Down)
+                QuickRotation(1);
+
+            if (InputService.Player.CameraRotationRight.Down)
+                QuickRotation(-1);
         }
 
         private void CameraRotation()
         {
-            var input = InputManager.Look;
+            var input = InputService.Player.Look.Value;
 
             input.x *= _horizontalSpeed * Time.deltaTime;
             input.y *= _verticalSpeed * Time.deltaTime;
@@ -83,10 +83,10 @@ namespace InGame.Player
 
         private void SwitchZoom()
         {
-            //ƒY[ƒ€’†‚ÍƒY[ƒ€‚µ‚È‚¢
+            //ã‚ºãƒ¼ãƒ ä¸­ã¯ã‚ºãƒ¼ãƒ ã—ãªã„
             if (_zoomTween?.active ?? false) return;
 
-            //Ÿ‚ÌIndex‚É‚·‚é
+            //æ¬¡ã®Indexã«ã™ã‚‹
             _currentZoomIndex = (_currentZoomIndex + 1) % _zoomAmount.Length;
 
             _zoomTween = _camera.DOLocalMoveZ(_zoomAmount[_currentZoomIndex], _zoomDuration).SetEase(_zoomEase);
@@ -95,7 +95,7 @@ namespace InGame.Player
 
         private void QuickRotation(float amount)
         {
-            //‰ñ“]’†‚Í‰ñ“]‚³‚¹‚È‚¢
+            //å›è»¢ä¸­ã¯å›è»¢ã•ã›ãªã„
             if (_quickRotationTween?.active ?? false) return;
 
             float startAngle = _currentEuler.y;
@@ -116,7 +116,8 @@ namespace InGame.Player
         {
             _shakeTween?.Complete();
 
-            _shakeTween = _camera.DOPunchPosition(Vector3.right * _shakeStrength, duration,Mathf.RoundToInt(_shakeVibrato * duration), _shakeElasticity);
+            // ã‚«ãƒ¡ãƒ©ã®ãƒ­ãƒ¼ã‚«ãƒ«Xæ–¹å‘(ç”»é¢ã®æ¨ªæ–¹å‘)ã«æºã‚‰ã™
+            _shakeTween = _camera.DOPunchPosition(Vector3.right * _shakeStrength, duration, Mathf.RoundToInt(_shakeVibrato * duration), _shakeElasticity);
         }
 
         private void OnDestroy()

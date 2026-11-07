@@ -23,14 +23,16 @@ namespace InGame.Player
         private void Start()
         {
             _filter = new(_detector);
-            InputManager.Interact.Subscribe(_ => Interact()).RegisterTo(destroyCancellationToken);
+
+            //æŠ¼ã•ã‚ŒãŸæ™‚ã«ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆé–¢æ•°ã‚’å‘¼ã¶
+            InputService.Player.Interact.OnPressed(Interact);
         }
 
         public void Interact()
         {
             if (IgnoreInteract) return;
 
-            //ƒCƒ“ƒ^ƒ‰ƒNƒg‚Å‚«‚é‚à‚Ì‚ğ’T‚·
+            //ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒˆã§ãã‚‹ã‚‚ã®ã‚’æ¢ã™
             foreach (var interactable in _filter.FilteredObjects)
             {
                 if (!interactable.CanInteract()) continue;
