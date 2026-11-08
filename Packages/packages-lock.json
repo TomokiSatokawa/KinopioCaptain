@@ -19,10 +19,9 @@
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.inputsystem": "1.14.0",
-        "com.cysharp.unitask": "2.5.11"
+        "com.unity.inputsystem": "1.14.0"
       },
-      "hash": "e25ca93a8f8b517f64d9959330f94239e630d13c"
+      "hash": "2dd1fa139cf611782241edd9599f2017b6a6a8f2"
     },
     "com.unity.2d.animation": {
       "version": "13.0.6",
