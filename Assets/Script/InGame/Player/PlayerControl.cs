@@ -22,6 +22,8 @@ namespace InGame.Player
         [Header("Slope")]
         [SerializeField] private float _slopeRayPos;
         [SerializeField] private float _slopeRayDistance;
+        [Header("Ladder")]
+        [SerializeField] private LadderMovement _ladderMovement;
 
         private Vector3 _velocity;
         private bool _isGround;
@@ -38,6 +40,21 @@ namespace InGame.Player
         private void Start()
         {
             _dustCloudEffect.Pause();
+            _ladderMovement.Initialize(this.transform);
+        }
+
+        private void Update()
+        {
+            if (!_ladderMovement.IsTransit && _ladderMovement.FindLadder())
+            {
+                _ladderMovement.OnStart();
+            }
+
+            if (_ladderMovement.IsTransit)
+            {
+                _ladderMovement.OnUpdate();
+                LookPlayer(_ladderMovement.GetLookDirection());
+            }
         }
 
         private void FixedUpdate()
@@ -53,7 +70,7 @@ namespace InGame.Player
 
             var input = InputService.Player.Move.Value;
 
-            if (IgnoreMoveInput.Flag) input = Vector2.zero;
+            if (IgnoreMoveInput.Flag || _ladderMovement.IsTransit) input = Vector2.zero;
 
             var direction = input.x * right + input.y * forward;
 
@@ -68,9 +85,6 @@ namespace InGame.Player
             GroundCheck();
             AddGravity();
             ApplyVelocity();
-
-
-
         }
 
         /// <summary>
@@ -153,6 +167,8 @@ namespace InGame.Player
 
         private void LookPlayer(Vector3 direction)
         {
+            if (direction == Vector3.zero) return;
+
             Quaternion from = transform.rotation;
             Quaternion to = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.RotateTowards(from, to, _lookSpeed * Time.deltaTime);
