@@ -40,7 +40,7 @@ namespace InGame.Player
         private Tween _quickRotationTween;
         private Vector3 _currentEuler = Vector3.zero;
 
-        private void Update()
+        private void FixedUpdate()
         {
             CameraRotation();
             CameraPosition();
@@ -59,8 +59,8 @@ namespace InGame.Player
         {
             var input = InputService.Player.Look.Value;
 
-            input.x *= _horizontalSpeed * Time.deltaTime;
-            input.y *= _verticalSpeed * Time.deltaTime;
+            input.x *= _horizontalSpeed * Time.fixedDeltaTime;
+            input.y *= _verticalSpeed * Time.fixedDeltaTime;
 
             var euler = _currentEuler;
 
@@ -77,7 +77,7 @@ namespace InGame.Player
         {
             var pos = _cameraOrigin.position;
             var clampedPlayerPos = _originPositionRangeZ.Clamp(_playerPosition.position.z);
-            pos.z = Mathf.Lerp(pos.z, clampedPlayerPos, Time.deltaTime * _followSmoothTime);
+            pos.z = Mathf.Lerp(pos.z, clampedPlayerPos, Time.fixedDeltaTime * _followSmoothTime);
             _cameraOrigin.position = pos;
         }
 

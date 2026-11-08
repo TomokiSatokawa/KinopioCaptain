@@ -1,3 +1,4 @@
+using System;
 using InGame.Common;
 using InGame.Stage;
 using UnityEngine;
@@ -36,14 +37,17 @@ namespace InGame.Player
         private Vector3 _moveMidPoint;
         private Vector3 _moveTarget;
         private float _moveElapsed;
+        private Action _finishAction;
 
         public bool IsTransit => _state != State.None;
 
-        public void Initialize(Transform player)
+        public void Initialize(Transform player,Action onFinish)
         {
             _player = player;
 
             _ladderDetector.OnContactEnter += LadderFilter;
+
+            _finishAction = onFinish;
         }
 
         public bool FindLadder()
@@ -180,10 +184,16 @@ namespace InGame.Player
 
             _ladderData = null;
             _state = State.None;
+
+            _finishAction?.Invoke();
         }
 
         private void LadderFilter(GameObject target)
         {
+            //‚Í‚µ‚²ˆÚ“®’†‚Í–³Ž‹
+            if (IsTransit)
+                return;
+
             if (!target.CompareTag("Ladder")) return;
 
             if (target.TryGetComponent(out LadderData ladderData))

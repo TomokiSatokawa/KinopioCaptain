@@ -40,7 +40,10 @@ namespace InGame.Player
         private void Start()
         {
             _dustCloudEffect.Pause();
-            _ladderMovement.Initialize(this.transform);
+            _ladderMovement.Initialize(this.transform,() =>
+            {
+                _playerRigidbody.isKinematic = false;
+            });
         }
 
         private void Update()
@@ -48,6 +51,7 @@ namespace InGame.Player
             if (!_ladderMovement.IsTransit && _ladderMovement.FindLadder())
             {
                 _ladderMovement.OnStart();
+                _playerRigidbody.isKinematic = true;
             }
 
             if (_ladderMovement.IsTransit)
