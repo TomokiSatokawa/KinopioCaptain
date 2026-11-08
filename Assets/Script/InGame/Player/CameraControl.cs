@@ -40,11 +40,8 @@ namespace InGame.Player
         private Tween _quickRotationTween;
         private Vector3 _currentEuler = Vector3.zero;
 
-        private void FixedUpdate()
+        private void Update()
         {
-            CameraRotation();
-            CameraPosition();
-
             if (InputService.Player.Zoom.Down)
                 SwitchZoom();
 
@@ -53,6 +50,13 @@ namespace InGame.Player
 
             if (InputService.Player.CameraRotationRight.Down)
                 QuickRotation(-1);
+
+        }
+
+        private void FixedUpdate()
+        {
+            CameraRotation();
+            CameraPosition();
         }
 
         private void CameraRotation()
