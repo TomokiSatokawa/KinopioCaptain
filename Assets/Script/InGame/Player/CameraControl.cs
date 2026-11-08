@@ -42,9 +42,6 @@ namespace InGame.Player
 
         private void Update()
         {
-            CameraRotation();
-            CameraPosition();
-
             if (InputService.Player.Zoom.Down)
                 SwitchZoom();
 
@@ -53,6 +50,13 @@ namespace InGame.Player
 
             if (InputService.Player.CameraRotationRight.Down)
                 QuickRotation(-1);
+
+        }
+
+        private void LateUpdate()
+        {
+            CameraRotation();
+            CameraPosition();
         }
 
         private void CameraRotation()
