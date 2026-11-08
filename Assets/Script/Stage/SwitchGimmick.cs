@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace InGame.Gimmick
 {
-    public class SwitchGimmick : MonoBehaviour, IInteractable
+    public class SwitchGimmick : MonoBehaviour, IInteractable, SwitchInterface.IInteractPromptProvider
     {
         [Header("引っこ抜き(上昇アニメーション完了後に実行)")]
         [SerializeField] private GameObject _switchEraseObject;
@@ -19,12 +19,21 @@ namespace InGame.Gimmick
         [SerializeField] private float _raiseDuration = 0.5f;
         [SerializeField] private Ease _raiseEase = Ease.OutQuad;
 
+        [Header("インタラクト案内の画像")] // ★
+        [SerializeField] private Sprite _promptSprite; // ★
+        [SerializeField] private Transform _promptAnchor; // ★ スイッチの上に置いた空オブジェクト
+
         [Header("イベント")]
         [SerializeField] private UnityEvent _onInteract;
         [SerializeField] private UnityEvent _onSwitchOn;
 
         private bool _isUsed;
         private Sequence _sequence;
+
+        // ★ IInteractPromptProvider
+        public Sprite PromptSprite => _promptSprite;
+        public Vector3 PromptWorldPosition =>
+            _promptAnchor != null ? _promptAnchor.position : transform.position;
 
         private void Awake()
         {
