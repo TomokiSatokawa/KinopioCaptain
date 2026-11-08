@@ -5,7 +5,7 @@ using Input;
 using R3;
 using System;
 using UnityEngine;
-using UnityEngine.UI; // ★
+using UnityEngine.UI;
 
 namespace InGame.Player
 {
@@ -15,19 +15,23 @@ namespace InGame.Player
         [SerializeField] private ObjectDetector _detector;
         [SerializeField] private PlayerControl _playerControl;
 
-        [Header("インタラクト案内UI")] // ★
-        [SerializeField] private Canvas _canvas;          // ★ 表示先のCanvas
-        [SerializeField] private Image _promptImage;      // ★ Canvasの直下に置いたImage
-        [SerializeField] private Vector2 _screenOffset = new(0f, 0f); // ★ 位置の微調整（ピクセル）
+        [Header("インタラクト案内UI")]
+        [SerializeField] private Canvas _canvas;
+        [SerializeField] private Image _promptImage;
+
+        [Header("吹き出しの大きさ（距離で拡大縮小）")]
+        [SerializeField] private float _referenceDistance = 5f;
+        [SerializeField] private float _minScale = 0.3f;
+        [SerializeField] private float _maxScale = 2f;
 
         public bool IgnoreInteract = false;
         public bool IsInteractStop = false;
 
         private ObjectFilter<IInteractable> _filter;
-        private IInteractable _currentTarget; // ← 追加
-        private Camera _worldCamera;      // ★ ワールドを映すカメラ
-        private Camera _uiCamera;         // ★ Canvas用カメラ（Overlayならnull）
-        private RectTransform _canvasRect; // ★
+        private IInteractable _currentTarget;
+        private Camera _worldCamera;
+        private Camera _uiCamera;
+        private RectTransform _canvasRect;
 
 
         private void Start()
@@ -35,7 +39,6 @@ namespace InGame.Player
             _filter = new(_detector);
             InputManager.Interact.Subscribe(_ => Interact()).RegisterTo(destroyCancellationToken);
 
-            // ★ UIの準備
             _worldCamera = Camera.main;
             if (_canvas != null)
             {
@@ -46,7 +49,8 @@ namespace InGame.Player
             }
             if (_promptImage != null)
             {
-                _promptImage.raycastTarget = false; // クリックを邪魔しない
+                _promptImage.raycastTarget = false;
+                _promptImage.rectTransform.pivot = new Vector2(0.5f, 0f);
                 _promptImage.enabled = false;
             }
         }
@@ -60,7 +64,6 @@ namespace InGame.Player
         {
             if (IgnoreInteract) return;
 
-            //インタラクトできるものを探す
             foreach (var interactable in _filter.FilteredObjects)
             {
                 if (!interactable.CanInteract()) continue;
@@ -73,12 +76,24 @@ namespace InGame.Player
 
         private IInteractable FindInteractable()
         {
+            IInteractable best = null;
+            float bestSqr = float.MaxValue;
+
             foreach (var interactable in _filter.FilteredObjects)
             {
                 if (!interactable.CanInteract()) continue;
-                return interactable;
+
+                float sqr = interactable is SwitchInterface.IInteractPromptProvider p
+                    ? (p.PromptWorldPosition - transform.position).sqrMagnitude
+                    : float.MaxValue;
+
+                if (best == null || sqr < bestSqr)
+                {
+                    best = interactable;
+                    bestSqr = sqr;
+                }
             }
-            return null;
+            return best;
         }
 
         private void UpdatePrompt()
@@ -87,7 +102,6 @@ namespace InGame.Player
 
             var target = (IgnoreInteract || IsInteractStop) ? null : FindInteractable();
 
-            // 対象が変わったときだけ画像を差し替える
             if (!ReferenceEquals(target, _currentTarget))
             {
                 _currentTarget = target;
@@ -103,14 +117,12 @@ namespace InGame.Player
                 }
             }
 
-            // 表示中は毎フレーム位置を更新
             if (_promptImage.enabled && _currentTarget is SwitchInterface.IInteractPromptProvider p)
             {
                 UpdatePromptPosition(p.PromptWorldPosition);
             }
         }
 
-        // ★ ワールド座標 → Canvas上の座標
         private void UpdatePromptPosition(Vector3 worldPos)
         {
             if (_worldCamera == null) _worldCamera = Camera.main;
@@ -118,18 +130,22 @@ namespace InGame.Player
 
             Vector3 screenPos = _worldCamera.WorldToScreenPoint(worldPos);
 
-            // カメラの後ろにある場合は隠す
-            if (screenPos.z < 0f)
+            if (screenPos.z <= 0f)
             {
                 _promptImage.enabled = false;
                 return;
             }
             _promptImage.enabled = true;
 
-            Vector2 screenPoint = (Vector2)screenPos + _screenOffset;
+            float scale = 1f;
+            if (!_worldCamera.orthographic)
+            {
+                scale = Mathf.Clamp(_referenceDistance / screenPos.z, _minScale, _maxScale);
+            }
+            _promptImage.rectTransform.localScale = Vector3.one * scale;
 
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    _canvasRect, screenPoint, _uiCamera, out Vector2 localPoint))
+                    _canvasRect, screenPos, _uiCamera, out Vector2 localPoint))
             {
                 _promptImage.rectTransform.localPosition = localPoint;
             }

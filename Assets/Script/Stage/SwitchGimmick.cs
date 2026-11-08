@@ -1,6 +1,4 @@
 using DG.Tweening;
-using InGame.Player;
-using InGame.Stage;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,9 +17,9 @@ namespace InGame.Gimmick
         [SerializeField] private float _raiseDuration = 0.5f;
         [SerializeField] private Ease _raiseEase = Ease.OutQuad;
 
-        [Header("インタラクト案内の画像")] // ★
-        [SerializeField] private Sprite _promptSprite; // ★
-        [SerializeField] private Transform _promptAnchor; // ★ スイッチの上に置いた空オブジェクト
+        [Header("インタラクト案内の画像")]
+        [SerializeField] private Sprite _promptSprite;
+        [SerializeField] private Transform _promptAnchor;
 
         [Header("イベント")]
         [SerializeField] private UnityEvent _onInteract;
@@ -30,8 +28,7 @@ namespace InGame.Gimmick
         private bool _isUsed;
         private Sequence _sequence;
 
-        // ★ IInteractPromptProvider
-        public Sprite PromptSprite => _promptSprite;
+        public Sprite PromptSprite => _promptAnchor != null ? _promptSprite : null;
         public Vector3 PromptWorldPosition =>
             _promptAnchor != null ? _promptAnchor.position : transform.position;
 
@@ -42,6 +39,10 @@ namespace InGame.Gimmick
             {
                 Debug.LogError($"[SwitchGimmick] 必須のInspector参照が設定されていません。 {this}");
                 enabled = false;
+            }
+            if (_promptAnchor == null)
+            {
+                Debug.LogWarning($"[SwitchGimmick] Prompt Anchor が未設定です。吹き出しは出ません。 {name}", this);
             }
         }
 
